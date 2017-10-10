@@ -1,0 +1,19 @@
+<div>
+  <h1>My Flocks</h1>
+  <div class='media' *ngFor="let flock of flocks | async">
+    <div class="media-content" [routerLink]="['/flocks', flock.$key]">{{ flock.name }}</div>
+  </div>
+</div>
+<hr>
+<p class="level">
+  Start a new flock form
+  form with field for name
+  redirect to flocks/flockId after save
+</p>
+<hr>
+<p class="level">
+  Join a flock
+  Form with button to join
+  Paste in flock.$key as secret
+  Writes flockId to user entry
+</p>

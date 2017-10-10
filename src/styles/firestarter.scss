@@ -1,0 +1,34 @@
+@import 'variables';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
+
+///// Content
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+
+.footer {
+  // flex: 1;
+  border-top: 1px solid $gray-lightest;
+  // padding: 40px;
+  min-height: 100px;
+  text-align: center;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.box {
+  border-radius: 0px;
+  margin-top: 5px;
+}
+
+.input {
+  margin-bottom: 5px;
+}

@@ -1,0 +1,41 @@
+<form [formGroup]="chickenForm" (ngSubmit)="addChicken()">
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item heading">
+        Add Chicken
+      </div>
+    </div>
+  </div>
+
+  <label for="name">Name</label>
+  <input type="text" id="name" class="input" formControlName="name" required>
+
+  <div *ngIf="formErrors.name" class="help is-danger">
+    {{ formErrors.name }}
+  </div>
+
+  <label for="breed">Breed</label>
+  <input type="text" id="breed" class="input" formControlName="breed">
+
+  <div *ngIf="formErrors.breed" class="help is-danger">
+    {{ formErrors.breed }}
+  </div>
+
+  <label for="hatched">Hatched</label>
+  <input type="date" id="hatched" class="input" formControlName="hatched">
+
+  <div *ngIf="formErrors.hatched" class="help is-danger">
+    {{ formErrors.hatched }}
+  </div>
+
+  <label for="photo">Photo URL</label>
+  <input type="text" id="photo" class="input" formControlName="photo">
+
+  <div *ngIf="formErrors.photo" class="help is-danger">
+    {{ formErrors.photo }}
+  </div>
+
+  <button type="submit" class="button is-primary" [disabled]="!chickenForm.valid">Submit</button>
+  <a class="button" (click)="location.back()">Cancel</a>
+
+</form>

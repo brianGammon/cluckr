@@ -1,0 +1,103 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a class="navbar-item logo" routerLink="/flock">
+        <img src="assets/images/cluckr_small.png" alt="cluckr">
+      </a>
+    <a class="navbar-item" routerLink="/flock">
+      {{ currentFlock?.name || 'Clucker'}}
+    </a>
+    <!-- <div class="navbar-item">
+      <a class="button is-small is-primary is-outlined" routerLink="/add">
+        <span class="icon">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span>Egg</span>
+      </a>
+    </div> -->
+
+    <div *ngIf="user" class="navbar-burger burger" (click)="toggleCollapse()" [ngClass]="{'is-active': show}" data-target="navMenuTransparentExample">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div id="navMenuTransparentExample" class="navbar-menu" [ngClass]="{'is-active': show}">
+
+    <div *ngIf="user" class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+            <div class="navbar-link">
+              Eggs
+            </div>
+            <div class="navbar-dropdown">
+              <div class="navbar-item">
+                  <a class="button is-small is-primary" routerLink="/add" (click)="toggleCollapse()">
+                      <span class="icon">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                      </span>
+                      <span>Egg</span>
+                  </a>
+              </div>
+
+              <div class="navbar-divider"></div>
+              <a class="navbar-item" [routerLink]="['/eggs/day', monthString + '-' + dayString]" (click)="toggleCollapse()">
+                      <span class="icon">
+                          <i class="fa fa-list" aria-hidden="true"></i>
+                      </span> By Day
+                  </a>
+                  <a class="navbar-item" [routerLink]="['/eggs/month', monthString]" (click)="toggleCollapse()">
+                    <span class="icon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span> By Month
+                </a>
+                <a class="navbar-item">
+                    <span class="icon">
+                        <i class="fa fa-area-chart" aria-hidden="true"></i>
+                    </span> Charts
+                </a>
+            </div>
+      </div>
+      <div *ngIf="user" class="navbar-item has-dropdown is-hoverable">
+        <div class="navbar-link">
+          My Flocks
+        </div>
+        <div class="navbar-dropdown">
+          <a *ngFor="let flock of flocks" class="navbar-item " (click)="setCurrentFlockId(flock.$key); toggleCollapse()">
+                {{flock.name}} <span *ngIf="flock.$key === user.currentFlockId" class="icon has-text-success">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                </span>
+              </a>
+          <div class="navbar-divider"></div>
+          <a class="navbar-item">
+                  <span class="icon">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                  </span> Create a new flock
+              </a>
+          <div class="navbar-divider"></div>
+          <a class="navbar-item">
+                  <span class="icon">
+                      <i class="fa fa-link" aria-hidden="true"></i>
+                  </span> Join a flock
+              </a>
+        </div>
+      </div>
+      <div *ngIf="user" class="navbar-item has-dropdown is-hoverable">
+          <div class="navbar-link">
+              <span class="icon is-hidden-touch">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+              </span>
+              <span class="is-hidden-desktop">{{user.email}}</span>
+          </div>
+
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item" (click)="signOut();toggleCollapse()">
+                    <span class="icon">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    </span> Sign out
+                </a>
+          </div>
+        </div>
+    </div>
+  </div>
+</nav>

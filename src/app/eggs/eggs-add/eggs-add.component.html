@@ -1,0 +1,78 @@
+<form [formGroup]="eggForm" (ngSubmit)="addEgg()">
+
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item heading">
+        Add Egg
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+      <label class="label">Date</label>
+      <div class="control">
+          <input type="date" id="dateLaid" class="input" formControlName="dateLaid" required>
+      </div>
+      <p *ngIf="formErrors.dateLaid" class="help is-danger">
+        {{ formErrors.dateLaid }}
+      </p>
+  </div>
+
+
+  <div class="field">
+    <label class="label">Chicken</label>
+    <div class="control">
+      <div class="select">
+        <select id="chickenId" formControlName="chickenId" required>
+          <option value="">Select a chicken</option>
+          <option *ngFor="let chicken of chickens | async" value="{{ chicken.$key }}">{{ chicken.name}}</option>
+        </select>
+      </div>
+    </div>
+    <p *ngIf="formErrors.chickenId" class="help is-danger">
+      {{ formErrors.chickenId }}
+    </p>
+  </div>
+
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+        <label class="label">Weight (g)</label>
+        <div class="control">
+          <input type="number" pattern="[0-9]+([,\.][0-9]+)?" id="weight" class="input" formControlName="weight">
+        </div>
+        <p *ngIf="formErrors.weight" class="help is-danger">
+          {{ formErrors.weight }}
+        </p>
+      </div>
+      </div>
+      <div class="level-item damaged-checkbox">
+        <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" id="damaged" formControlName="damaged">
+            Damaged
+          </label>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="field">
+    <label class="label">Notes</label>
+    <div class="control">
+      <textarea class="textarea" id="notes" placeholder="e.g. Anything interesting about this egg" formControlName="notes"></textarea>
+    </div>
+    <p *ngIf="formErrors.notes" class="help is-danger">
+      {{ formErrors.notes }}
+    </p>
+  </div>
+
+  <button type="submit" class="button is-primary" [disabled]="!eggForm.valid">Submit</button>
+  <a class="button" (click)="location.back()">Cancel</a>
+
+</form>

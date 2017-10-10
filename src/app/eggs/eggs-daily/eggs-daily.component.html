@@ -1,0 +1,100 @@
+<div *ngIf="eggs | async; let eggs">
+  <div *ngIf="chickens | async; let chickens">
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="heading">Eggs By Day</p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item has-text-centered">
+          <a class="button is-small is-primary" routerLink="/add" [queryParams]="{date: dateString}">
+            <span class="icon">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Egg</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="level is-mobile">
+      <div class="level-item has-text-centered">
+        <a class="button" [routerLink]="['/eggs/day', previousDate]">
+          <span class="icon is-small">
+            <i class="fa fa-chevron-left"></i>
+          </span>
+        </a>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Date</p>
+          <p class="title is-4">{{ dateString | date }}</p>
+        </div>
+      </div>
+
+      <div class="level-item has-text-centered">
+        <a class="button" [routerLink]="['/eggs/day', nextDate]">
+          <span class="icon is-small">
+            <i class="fa fa-chevron-right"></i>
+          </span>
+        </a>
+      </div>
+
+      <div class="level-item has-text-centered">
+        <a class="button" [routerLink]="['/eggs/day', nextDate]">
+          <span class="icon is-small">
+            <i class="fa fa-calendar"></i>
+          </span>
+        </a>
+      </div>
+
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Eggs</p>
+          <p class="title is-4">{{ eggs.length }}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+
+    <div class="egg-list">
+      <div *ngFor="let egg of eggs" class="media">
+
+        <div class="media-content">
+          <div class="content">
+            <div class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  <a [routerLink]="['/chicken', egg.chicken]">{{ chickens[egg.chicken].name }}</a>
+                </div>
+              </div>
+              <div *ngIf="egg.weight" class="level-item">
+                <span>
+                  {{ egg.weight }}g
+                </span>
+                <span *ngIf="egg.damaged" class="icon has-text-danger">
+                  <i class="fa fa-warning"></i>
+                </span>
+              </div>
+            </div>
+            <div *ngIf="egg.notes" class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  <em>"{{ egg.notes }}"</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="media-right">
+          <button class="delete is-medium" (click)="deleteEgg(egg.$key)"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<div *ngIf="flock | async; let flock; else loading">
+  <div *ngIf="!flock.name" class="notification is-danger">
+    Flock not found
+  </div>
+
+  <div *ngIf="flock.name">
+    <!-- <div class="level">
+      <div class="level-item">
+
+        <p>{{ flock.name }}</p>
+
+
+      </div>
+
+    </div> -->
+    <div *ngIf="chickens | async; let chickens; else loading" class="chicken-list">
+
+      <div class="level is-mobile">
+        <div class="level-left">
+          <div class="level-item">
+            <p class="heading">Flock Stats</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item has-text-centered">
+            <a class="button is-small is-primary" routerLink="/add">
+              <span class="icon">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </span>
+              <span>Egg</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="level is-mobile">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Total</p>
+            <p class="title is-4">{{ stats?.total }}</p>
+            <p class="subtitle is-6">Eggs</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Heaviest</p>
+            <p class="title is-4">{{ stats?.heaviest.weight }}</p>
+            <p class="subtitle is-6">
+              <a [routerLink]="['/eggs/day', stats?.heaviest.date]">Grams</a>
+            </p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Avg Weight</p>
+            <p class="title is-4">{{ stats?.averageWeight | number:'1.1-1' }}</p>
+            <p class="subtitle is-6">Grams</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Avg</p>
+            <p class="title is-4">{{ stats?.averageNumber | number:'1.1-1' }}</p>
+            <p class="subtitle is-6">Per Day</p>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <p class="heading">Flock</p>
+            </div>
+          </div>
+          <div class="level-right">
+              <div class="level-item has-text-centered">
+                  <a class="button is-small is-outlined" routerLink="/chicken-add">
+                    <span class="icon">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    <span>Chicken</span>
+                  </a>
+                </div>
+
+          </div>
+
+        </div>
+
+      <div *ngFor="let chicken of chickens" class="media">
+        <div class="media-left">
+          <p class="image is-64x64">
+            <a [routerLink]="['/chicken', chicken.$key]">
+              <img [src]="chicken.photo ? chicken.photo : '/assets/images/default-profile-photo.png'">
+            </a>
+          </p>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <a [routerLink]="['/chicken', chicken.$key]">
+                <strong>{{ chicken.name }}</strong>
+              </a>
+            </p>
+            <p *ngIf="stats?.heaviest.chicken === chicken.$key">
+              <span class="icon">
+                <i class="fa fa-trophy" aria-hidden="true"></i>
+              </span> Heaviest Egg
+            </p>
+            <p *ngIf="stats?.mostEggs === chicken.$key">
+              <span class="icon">
+                <i class="fa fa-trophy" aria-hidden="true"></i>
+              </span> Most Eggs
+            </p>
+          </div>
+        </div>
+        <div class="media-right">
+          <button class="delete is-medium" (click)="deleteChicken(chicken.$key)"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #loading>
+  <loading-spinner></loading-spinner>
+</ng-template>

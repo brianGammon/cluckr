@@ -1,0 +1,90 @@
+<div *ngIf="chicken | async; let chicken">
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="heading">Chicken Profile</p>
+      </div>
+
+    </div>
+    <div class="level-right">
+      <div class="level-item has-text-centered">
+        <a class="button is-small is-primary" routerLink="/add" [queryParams]="{chickenId: chicken.$key}">
+          <span class="icon">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </span>
+          <span>Egg</span>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+  <article class="media">
+    <figure class="media-left">
+      <p class="image is-128x128">
+        <img [src]="chicken.photo ? chicken.photo : '/assets/images/default-profile-photo.png'">
+      </p>
+    </figure>
+    <div class="media-content">
+      <div class="content">
+        <p>
+          <span class="heading">
+            Name
+          </span>
+          <span class="title is-6">
+            {{ chicken.name }}
+          </span>
+        </p>
+
+        <p *ngIf="chicken.breed">
+          <span class="heading">
+            Breed
+          </span>
+          <span class="title is-6">
+            {{ chicken.breed }}
+          </span>
+        </p>
+        <p *ngIf="chicken.hatched">
+          <span class="heading">
+            Hatched
+          </span>
+          <span class="title is-6">
+            {{ chicken.hatched }}
+          </span>
+        </p>
+      </div>
+
+    </div>
+  </article>
+  <hr>
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="heading">Stats</p>
+      </div>
+    </div>
+  </div>
+  <div class="level is-mobile">
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Eggs</p>
+        <p class="title is-4">{{ total }}</p>
+        <p class="subtitle is-6">Total</p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Heaviest</p>
+        <p class="title is-4">{{ heaviest?.weight }}g</p>
+        <p class="subtitle is-6">on {{ heaviest?.date | date }}</p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Avg</p>
+        <p class="title is-4">2.2</p>
+        <p class="subtitle is-6">Per Day</p>
+      </div>
+    </div>
+  </div>
+</div>

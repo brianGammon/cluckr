@@ -45,7 +45,9 @@ export class UserLoginComponent implements OnInit {
   }
 
   signup(): void {
-    this.userService.signUp(this.userForm.value['email'], this.userForm.value['password']);
+    this.userService.signUp(this.userForm.value['email'], this.userForm.value['password']).then(() => {
+      this.router.navigateByUrl('/flocks');
+    });
   }
 
   login(): void {

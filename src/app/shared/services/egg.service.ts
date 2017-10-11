@@ -18,7 +18,7 @@ export class EggService {
   getEggsByChickenId(flockId: string, chickenId: string) {
     return this.db.list(`eggs/${flockId}`, {
       query: {
-        orderByChild: 'chicken',
+        orderByChild: 'chickenId',
         equalTo: chickenId
       }
     });

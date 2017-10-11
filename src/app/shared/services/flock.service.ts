@@ -23,4 +23,20 @@ export class FlockService {
       }
     });
   }
+
+  addFlock(name: string, userId: string) {
+    const ref = this.db.list('flocks/');
+    const flock = new Flock();
+    flock.name = name;
+    flock.users = {};
+    flock.users[userId] = true;
+    return ref.push(flock);
+  }
+
+  joinFlock(flockId: string, userId: string) {
+    const ref = this.db.object(`flocks/${flockId}/users`);
+    const newObj = {};
+    newObj[userId] = true;
+    return ref.update(newObj);
+  }
 }

@@ -11,6 +11,9 @@
     },
     "chickens": {
       ".write": "auth != null"
+    },
+    "flocks": {
+      ".write": "auth != null"
     }
   }
 }

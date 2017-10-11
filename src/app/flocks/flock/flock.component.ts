@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService, FlockService, ChickenService, EggService } from '../../shared/services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +18,7 @@ export class FlockComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
     private flockService: FlockService,
     private chickenService: ChickenService,
@@ -27,6 +28,9 @@ export class FlockComponent implements OnInit {
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
       if (user) {
+        if (!user.currentFlockId) {
+          return this.router.navigateByUrl('/flocks');
+        }
         this.flockId = user.currentFlockId;
         this.flock = this.flockService.getFlock(user.currentFlockId);
         this.chickens = this.chickenService.getChickensList(user.currentFlockId);

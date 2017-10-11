@@ -1,19 +1,79 @@
-<div>
-  <h1>My Flocks</h1>
-  <div class='media' *ngFor="let flock of flocks | async">
-    <div class="media-content" [routerLink]="['/flocks', flock.$key]">{{ flock.name }}</div>
+<div class="level is-mobile">
+  <div class="level-left">
+    <div class="level-item">
+      <p class="title is-6">My Flocks</p>
+    </div>
   </div>
 </div>
-<hr>
-<p class="level">
-  Start a new flock form
-  form with field for name
-  redirect to flocks/flockId after save
-</p>
-<hr>
-<p class="level">
-  Join a flock
-  Form with button to join
-  Paste in flock.$key as secret
-  Writes flockId to user entry
-</p>
+
+<div *ngIf="flocks | async; let flocks; else loading">
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="heading">Manage an existing flock</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="panel">
+    <a *ngFor="let flock of flocks" class="panel-block is-active" (click)="selectFlock(flock.$key)">
+      <span>{{ flock.name }}</span>
+      <span *ngIf="flock.$key === user.currentFlockId">
+        <span class="icon has-text-success">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+        </span> Active
+      </span>
+    </a>
+  </nav>
+
+  <hr>
+</div>
+
+<div class="level is-mobile">
+  <div class="level-left">
+    <div class="level-item">
+      <p class="heading">Create a new flock</p>
+    </div>
+  </div>
+</div>
+<div class="field has-addons">
+    <div class="control wide">
+      <input [(ngModel)]="newFlockName" class="input" type="text" placeholder="Enter a name for your flock">
+    </div>
+    <div class="control">
+        <a class="button is-light" (click)="addFlock()">
+            <span class="icon">
+                <i class="fa fa-plus"></i>
+              </span>
+          <span>New Flock</span>
+          </a>
+    </div>
+  </div>
+  <hr>
+<div class="level is-mobile">
+  <div class="level-left">
+    <div class="level-item">
+      <p class="heading">Join someone else's flock</p>
+    </div>
+  </div>
+</div>
+
+    <div class="field has-addons">
+        <div class="control wide">
+          <input [(ngModel)]="joinFlockId" class="input" type="text" placeholder="Enter a Flock ID">
+        </div>
+        <div class="control">
+          <a class="button is-light" (click)="joinFlock()">
+              <span class="icon">
+                  <i class="fa fa-link"></i>
+                </span>
+            <span>Join Flock</span>
+          </a>
+        </div>
+      </div>
+
+
+
+<ng-template #loading>
+  <loading-spinner></loading-spinner>
+</ng-template>

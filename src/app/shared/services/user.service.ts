@@ -31,8 +31,7 @@ export class UserService {
 
   setCurrentFlockId(flockId: string) {
     const ref = this.db.object(`users/${this.uid}`);
-    ref.update({ currentFlockId: flockId})
-      .catch(err => console.log(err));
+    return ref.update({ currentFlockId: flockId});
   }
 
   signUp(email: string, password: string) {

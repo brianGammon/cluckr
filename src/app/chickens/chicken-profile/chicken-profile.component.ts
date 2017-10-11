@@ -1,54 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../shared/auth.service';
+import { UserService, ChickenService, EggService } from '../../shared/services';
+import { Observable } from 'rxjs/Observable';
+import { Egg, Chicken } from '../../shared/models';
 import * as _ from 'lodash';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 
 @Component({
   templateUrl: './chicken-profile.component.html',
   styleUrls: ['./chicken-profile.component.scss']
 })
 export class ChickenProfileComponent implements OnInit {
-  chicken: FirebaseObjectObservable<any> = null;
-  heaviest: any;
+  chicken: Observable<Chicken> = null;
+  heaviest: Egg;
   total: number;
   flockId: string;
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService,
-    private db: AngularFireDatabase
+    private userService: UserService,
+    private chickenService: ChickenService,
+    private eggService: EggService
   ) {
     this.route.params.subscribe(params => {
       const chickenId = params['chickenId'];
 
-      this.authService.currentUserObservable.subscribe(authState => {
-        if (authState) {
-          this.db.object('/users/' + authState['uid']).subscribe(user => {
-            this.flockId = user.currentFlockId;
+      this.userService.currentUser.subscribe(user => {
+        if (user) {
+          this.flockId = user.currentFlockId;
+          this.chicken = this.chickenService.getChicken(this.flockId, chickenId);
 
-            this.chicken = this.db.object(`chickens/${this.flockId}/${chickenId}`);
-
-            const eggsPath = `eggs/${this.flockId}`;
-            const eggs = this.db.list(eggsPath, {
-              query: {
-                orderByChild: 'chicken',
-                equalTo: chickenId
-              }
-            });
-
-            eggs.subscribe(data => {
-              // this.getStreak(eggs);
-              this.total = data.length;
-              if (this.total > 0) {
-                this.heaviest = this.getHeaviest(data);
-              }
-              console.log(this.heaviest);
-            });
+          this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(data => {
+            // this.getStreak(eggs);
+            this.total = data.length;
+            if (this.total > 0) {
+              this.heaviest = this.getHeaviest(data);
+            }
           });
         }
       });
-    })
+    });
   }
 
   ngOnInit() {
@@ -64,11 +54,10 @@ export class ChickenProfileComponent implements OnInit {
     //  });
   }
 
-  getHeaviest(eggs) {
+  getHeaviest(eggs: Egg[]) {
     let heaviest = 0;
     let heaviestEgg = null;
     eggs.forEach(egg => {
-      console.log(+egg.weight);
       if (egg.weight && +egg.weight >= heaviest) {
         heaviest = +egg.weight;
         heaviestEgg = egg;

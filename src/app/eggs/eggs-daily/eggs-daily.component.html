@@ -64,13 +64,12 @@
 
     <div class="egg-list">
       <div *ngFor="let egg of eggs" class="media">
-
         <div class="media-content">
           <div class="content">
             <div class="level is-mobile">
               <div class="level-left">
                 <div class="level-item">
-                  <a [routerLink]="['/chicken', egg.chicken]">{{ chickens[egg.chicken].name }}</a>
+                  <a [routerLink]="['/chicken', egg.chickenId]">{{ chickens[egg.chickenId].name }}</a>
                 </div>
               </div>
               <div *ngIf="egg.weight" class="level-item">

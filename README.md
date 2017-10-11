@@ -2,7 +2,6 @@
 
 Cluckr lets you track the egg production and statistics for your backyard flock.
 
-
 ## Features
 
 - Create a flock or join an existing flock

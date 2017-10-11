@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../shared/auth.service';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { UserService, ChickenService } from '../../shared/services';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Chicken } from '../../shared/models';
 
 @Component({
   templateUrl: './chicken-add.component.html',
   styleUrls: ['./chicken-add.component.scss']
 })
 export class ChickenAddComponent implements OnInit {
-  // eggs: FirebaseListObservable<any> = null;
-  // flock: FirebaseObjectObservable<any> = null;
   chickenForm: FormGroup;
   location: Location;
 
@@ -29,8 +27,8 @@ export class ChickenAddComponent implements OnInit {
     private router: Router,
     private locationService: Location,
     private fb: FormBuilder,
-    private db: AngularFireDatabase,
-    private authService: AuthService
+    private userService: UserService,
+    private chickenService: ChickenService
   ) {
     this.location = locationService;
   }
@@ -52,20 +50,20 @@ export class ChickenAddComponent implements OnInit {
   }
 
   addChicken() {
-    this.authService.currentUserObservable.take(1).subscribe(authState => {
-      if (authState) {
-        this.db.object(`users/${authState['uid']}`).take(1).subscribe(user => {
-          const flockId = user.currentFlockId;
-          const itemPath = 'chickens/' + flockId;
-          const items = this.db.list(itemPath);
+    this.userService.currentUser.take(1).subscribe(user => {
+      if (user) {
+        const chicken = new Chicken();
+        chicken.name = this.chickenForm.get('name').value;
+        chicken.breed = this.chickenForm.get('breed').value;
+        chicken.hatched = this.chickenForm.get('hatched').value;
+        chicken.photo = this.chickenForm.get('photo').value;
 
-          items.push(this.chickenForm.value)
-            .then(data => {
-              console.log(data);
-              this.router.navigateByUrl('/flock');
-            })
-            .catch(error => console.log(error))
-        });
+        this.chickenService.addChicken(user.currentFlockId, chicken)
+          .then(data => {
+            console.log(data);
+            this.router.navigateByUrl('/flock');
+          })
+          .catch(error => console.log(error));
       } else {
         console.log('Not logged in, cannot add chicken');
       }
@@ -92,9 +90,4 @@ export class ChickenAddComponent implements OnInit {
       }
     }
   }
-
-  // getKeys(flock: string) {
-  //   return Object.keys(eggs);
-  // }
-
 }

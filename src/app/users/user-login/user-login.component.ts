@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../shared/auth.service';
+import { UserService } from '../../shared/services';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -33,7 +33,7 @@ export class UserLoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private auth: AuthService
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -45,18 +45,18 @@ export class UserLoginComponent implements OnInit {
   }
 
   signup(): void {
-    this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password'])
+    this.userService.signUp(this.userForm.value['email'], this.userForm.value['password']);
   }
 
   login(): void {
-    this.auth.emailLogin(this.userForm.value['email'], this.userForm.value['password']).then(data => {
+    this.userService.signIn(this.userForm.value['email'], this.userForm.value['password']).then(data => {
       this.router.navigateByUrl('/flock');
     });
   }
 
   resetPassword() {
-    this.auth.resetPassword(this.userForm.value['email'])
-      .then(() => this.passReset = true)
+    this.userService.resetPassword(this.userForm.value['email'])
+      .then(() => this.passReset = true);
   }
 
   buildForm(): void {

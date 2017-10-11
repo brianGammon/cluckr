@@ -1,33 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import { AuthService } from '../../shared/auth.service'
+import { FirebaseListObservable } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
+import { UserService, FlockService } from '../../shared/services';
+import { Flock } from '../../shared/models/flock';
 
 @Component({
   templateUrl: './flocks.component.html',
   styleUrls: ['./flocks.component.scss']
 })
 export class FlocksComponent implements OnInit {
-  flocks: FirebaseListObservable<any> = null;
+  flocks: Observable<Flock[]> = null;
 
   constructor(
-    private authService: AuthService,
-    private db: AngularFireDatabase
+    private userService: UserService,
+    private flockService: FlockService
   ) {
-    this.authService.currentUserObservable.subscribe(authState => {
-      if (authState) {
-        this.flocks = this.db.list('flocks', {
-          query: {
-            orderByChild: 'users/' + authState.uid,
-            equalTo: true
-          }
-        });
-      }
-    })
   }
 
   ngOnInit() {
-
+    this.userService.currentUser.subscribe(user => {
+      if (user) {
+        this.flocks = this.flockService.getFlocks(user['$key']);
+      }
+    });
   }
-
-
 }

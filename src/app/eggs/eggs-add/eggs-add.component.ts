@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../shared/auth.service';
+import { UserService, ChickenService, EggService } from '../../shared/services';
 import * as moment from 'moment';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Chicken, Egg } from '../../shared/models';
 
 @Component({
   templateUrl: './eggs-add.component.html',
   styleUrls: ['./eggs-add.component.scss']
 })
 export class EggsAddComponent implements OnInit {
-  flockId: any;
-  chickens: FirebaseListObservable<any> = null;
-  // flock: FirebaseObjectObservable<any> = null;
+  flockId: string;
+  chickens: Observable<Chicken[]> = null;
   eggForm: FormGroup;
   location: Location;
   private userId: string;
@@ -36,28 +36,23 @@ export class EggsAddComponent implements OnInit {
     private router: Router,
     public locationService: Location,
     private route: ActivatedRoute,
-    private authService: AuthService,
-    private fb: FormBuilder,
-    private db: AngularFireDatabase
+    private userService: UserService,
+    private chickenService: ChickenService,
+    private eggService: EggService,
+    private fb: FormBuilder
   ) {
-    this.location = locationService
+    this.location = locationService;
   }
 
   ngOnInit() {
     const defaultDate = this.route.snapshot.queryParamMap.get('date') || moment().format('YYYY-MM-DD');
     const defaultChickenId = this.route.snapshot.queryParamMap.get('chickenId');
-    console.log(defaultDate);
 
-    this.authService.currentUserObservable.subscribe(authState => {
-      if (authState) {
-        this.db.object('/users/' + authState['uid']).subscribe(user => {
-          this.userId = user.$key;
-          this.flockId = user.currentFlockId;
-          console.log(this.flockId);
-
-          const chickensPath = 'chickens/' + this.flockId;
-          this.chickens = this.db.list(chickensPath);
-        });
+    this.userService.currentUser.subscribe(user => {
+      if (user) {
+        this.userId = user['$key'];
+        this.flockId = user.currentFlockId;
+        this.chickens = this.chickenService.getChickensList(user.currentFlockId);
       }
     });
 
@@ -80,23 +75,20 @@ export class EggsAddComponent implements OnInit {
   }
 
   addEgg() {
-    const itemPath = 'eggs/' + this.flockId;
-    const items = this.db.list(itemPath);
-    const newEgg = {
-      'date': this.eggForm.value['dateLaid'],
-      'chicken': this.eggForm.value['chickenId'],
-      'weight': this.eggForm.value['weight'],
-      'damaged': !!this.eggForm.value['damaged'],
-      'notes': this.eggForm.value['notes'],
-      'userId': this.userId,
-      'modified': moment().utc().toISOString()
-    }
-    items.push(newEgg)
+    const egg = new Egg();
+    egg.date =  this.eggForm.value['dateLaid'];
+    egg.chickenId = this.eggForm.value['chickenId'];
+    egg.weight = this.eggForm.value['weight'];
+    egg.damaged = !!this.eggForm.value['damaged'];
+    egg.notes = this.eggForm.value['notes'];
+    egg.userId = this.userId;
+    egg.modified = moment().utc().toISOString();
+
+    this.eggService.saveEgg(this.flockId, egg)
       .then(data => {
-        console.log(data);
         this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error));
   }
 
   // Updates validation state on form changes.

@@ -1,47 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../shared/auth.service';
+import { UserService, FlockService, ChickenService, EggService } from '../../shared/services';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
+import { Flock, Chicken, FlockStats, Egg } from '../../shared/models';
 
 @Component({
   templateUrl: './flock.component.html',
   styleUrls: ['./flock.component.scss']
 })
 export class FlockComponent implements OnInit {
-  flock: FirebaseObjectObservable<any> = null;
-  chickens: FirebaseListObservable<any> = null;
-  // eggs: FirebaseListObservable<any> = null;
-  stats: any;
+  flock: Observable<Flock> = null;
+  chickens: Observable<Chicken[]> = null;
+  stats: FlockStats;
   private flockId: string;
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService,
-    private db: AngularFireDatabase
+    private userService: UserService,
+    private flockService: FlockService,
+    private chickenService: ChickenService,
+    private eggService: EggService
   ) {}
 
   ngOnInit() {
-    this.authService.currentUserObservable.subscribe(authState => {
-      if (authState) {
-        this.db.object(`users/${authState['uid']}`).subscribe((user) => {
-          this.flock = this.db.object(`flocks/${user.currentFlockId}`);
-          const chickenPath = `chickens/${user.currentFlockId}`;
-          this.chickens = this.db.list(chickenPath);
-          this.db.list(`eggs/${user.currentFlockId}`).subscribe(eggs => {
-            this.stats = this.buildStats(eggs);
-          });
+    this.userService.currentUser.subscribe(user => {
+      if (user) {
+        this.flockId = user.currentFlockId;
+        this.flock = this.flockService.getFlock(user.currentFlockId);
+        this.chickens = this.chickenService.getChickensList(user.currentFlockId);
+        this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
+          this.stats = this.buildStats(eggs);
         });
       }
     });
   }
 
   deleteChicken(key) {
-    this.chickens.remove(key);
+    this.chickenService.deleteChicken(this.flockId, key)
+      .catch(err => console.log(err));
   }
 
-  buildStats(eggs: any) {
+  buildStats(eggs: Egg[]): FlockStats {
     let heaviestEgg = null;
     let highestWeight = 0;
     let totalWithWeight = 0;
@@ -52,15 +53,15 @@ export class FlockComponent implements OnInit {
 
     const sortedEggs = _.sortBy(eggs, 'date');
 
-    sortedEggs.forEach((egg: any) => {
+    sortedEggs.forEach((egg: Egg) => {
       if (!earliestDate) {
         earliestDate = egg.date;
       }
 
-      if (!eggsPerChicken[egg.chicken]) {
-        eggsPerChicken[egg.chicken] = 0;
+      if (!eggsPerChicken[egg.chickenId]) {
+        eggsPerChicken[egg.chickenId] = 0;
       }
-      eggsPerChicken[egg.chicken]++;
+      eggsPerChicken[egg.chickenId]++;
 
       // Find heaviest & avg
       if (egg.weight) {
@@ -94,7 +95,7 @@ export class FlockComponent implements OnInit {
       averageNumber: eggs.length / daysSinceFirst,
       firstEgg: earliestDate,
       mostEggs: topProducer
-    }
+    };
   }
 
 }

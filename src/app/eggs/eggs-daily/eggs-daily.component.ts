@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { AuthService } from '../../shared/auth.service'
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { UserService, ChickenService, EggService } from '../../shared/services';
+import { Observable } from 'rxjs/Observable';
+import { Egg, Chicken } from '../../shared/models';
 
 @Component({
   templateUrl: './eggs-daily.component.html',
   styleUrls: ['./eggs-daily.component.scss']
 })
 export class EggsDailyComponent implements OnInit {
-  eggs: FirebaseListObservable<any> = null;
-  chickens: FirebaseObjectObservable<any> = null;
+  eggs: Observable<Egg[]> = null;
+  chickens: Observable<Chicken[]> = null;
   dateString: string;
   previousDate: string;
   nextDate: string;
@@ -18,40 +19,29 @@ export class EggsDailyComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService,
-    private db: AngularFireDatabase
+    private userService: UserService,
+    private chickenService: ChickenService,
+    private eggService: EggService
   ) {}
 
   ngOnInit() {
-    this.authService.currentUserObservable.subscribe(authState => {
-      if (authState) {
-        this.db.object('/users/' + authState['uid']).subscribe(user => {
-          this.flockId = user.currentFlockId;
-          console.log(this.flockId);
+    this.userService.currentUser.subscribe(user => {
+      if (user) {
+        this.flockId = user.currentFlockId;
 
-          this.route.params.subscribe(params => {
-            this.setNavDates(params['date']);
-            this.dateString = params['date'];
-            const eggsPath = 'eggs/' + this.flockId;
-            this.eggs = this.db.list(eggsPath, {
-              query: {
-                orderByChild: 'date',
-                equalTo: this.dateString
-              }
-            });
-
-            const chickensPath = 'chickens/' + this.flockId;
-            this.chickens = this.db.object(chickensPath);
-
-          })
-        })
+        this.route.params.subscribe(params => {
+          this.setNavDates(params['date']);
+          this.dateString = params['date'];
+          this.eggs = this.eggService.getEggsByDate(this.flockId, this.dateString);
+          this.chickens = this.chickenService.getChickens(this.flockId);
+        });
       }
-    })
+    });
   }
 
   deleteEgg(key) {
-    this.eggs.remove(key)
-    .catch(error => console.log(error))
+    this.eggService.deleteEgg(this.flockId, key)
+      .catch(error => console.log(error));
   }
 
   private setNavDates(date: string) {

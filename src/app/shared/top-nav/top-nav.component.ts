@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import { AuthService } from '../../shared/auth.service';
+import { UserService, FlockService } from '../../shared/services';
+import { User, Flock } from '../models';
 import * as moment from 'moment';
 
 @Component({
@@ -26,9 +26,9 @@ import * as moment from 'moment';
   ]
 })
 export class TopNavComponent implements OnInit {
-  user: any;
-  flocks: any;
-  currentFlock: any;
+  user: User;
+  flocks: Flock[];
+  currentFlock: Flock;
   dayString: string = moment().format('DD');
   monthString: string = moment().format('YYYY-MM');
 
@@ -36,45 +36,34 @@ export class TopNavComponent implements OnInit {
   show = false;
 
   constructor(
-    private authService: AuthService,
-    private db: AngularFireDatabase
-  ) { }
+    private userService: UserService,
+    private flockService: FlockService
+  ) {}
 
   ngOnInit() {
-    this.authService.currentUserObservable.subscribe(authState => {
-      if (authState) {
-        this.db.object('users/' + authState['uid']).subscribe(user => {
-
+    this.userService.currentUser.subscribe(user => {
+      if (user) {
           this.user = user;
-          this.db.list('flocks', {
-            query: {
-              orderByChild: 'users/' + authState['uid'],
-              equalTo: true
-            }
-          }).subscribe(result => {
-
+          this.flockService.getFlocks(user['$key']).subscribe(result => {
             this.flocks = result;
             this.currentFlock = result.find(flock => flock.$key === user.currentFlockId);
           });
-        })
-
       }
-    })
+    });
   }
 
   toggleCollapse() {
-    this.show = !this.show
+    this.show = !this.show;
     // this.collapse = this.collapse == "open" ? 'closed' : 'open';
 
   }
 
   signOut() {
-    this.authService.signOut();
+    this.userService.signOut();
   }
 
   setCurrentFlockId(flockId: string) {
-    const ref = this.db.object('users/' + this.user.$key);
-    ref.update({ currentFlockId: flockId});
+    this.userService.setCurrentFlockId(flockId);
   }
 
 }

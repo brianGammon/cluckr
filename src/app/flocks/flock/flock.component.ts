@@ -13,7 +13,7 @@ import { Flock, Chicken, FlockStats, Egg } from '../../shared/models';
 export class FlockComponent implements OnInit {
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
-  stats: FlockStats;
+  stats: FlockStats = null;
   private flockId: string;
 
   constructor(
@@ -35,7 +35,9 @@ export class FlockComponent implements OnInit {
         this.flock = this.flockService.getFlock(user.currentFlockId);
         this.chickens = this.chickenService.getChickensList(user.currentFlockId);
         this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
-          this.stats = this.buildStats(eggs);
+          if (eggs.length > 0) {
+            this.stats = this.buildStats(eggs);
+          }
         });
       }
     });

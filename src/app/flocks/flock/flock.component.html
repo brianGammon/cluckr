@@ -35,7 +35,13 @@
 
         </div>
 
-        <div class="level is-mobile">
+        <div *ngIf="!stats" class="level is-mobile">
+          <div class="level-item">
+            <em>No Eggs Logged Yet</em>
+          </div>
+        </div>
+
+        <div *ngIf="stats" class="level is-mobile">
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Total</p>

@@ -24,10 +24,10 @@ export class FlocksComponent implements OnInit {
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
+      console.log(user);
+
       if (user) {
-        if (user.currentFlockId) {
-          this.user = user;
-        }
+        this.user = user;
         this.flocks = this.flockService.getFlocks(user['$key']);
       }
     });
@@ -69,5 +69,15 @@ export class FlocksComponent implements OnInit {
   selectFlock(flockId: string) {
     this.userService.setCurrentFlockId(flockId);
     this.router.navigateByUrl('/flock');
+  }
+
+  deleteFlock(flockId: string) {
+    if (window.confirm('Are you sure? Click OK to delete the flock, along with chickens and eggs belonging to it.')) {
+      if (this.user.currentFlockId === flockId) {
+        this.userService.setCurrentFlockId(null);
+      }
+      this.flockService.deleteFlock(flockId)
+        .catch(err => console.log(err));
+    }
   }
 }

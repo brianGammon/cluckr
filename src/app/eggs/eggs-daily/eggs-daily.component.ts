@@ -22,7 +22,7 @@ export class EggsDailyComponent implements OnInit {
     private userService: UserService,
     private chickenService: ChickenService,
     private eggService: EggService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
@@ -40,8 +40,10 @@ export class EggsDailyComponent implements OnInit {
   }
 
   deleteEgg(key) {
-    this.eggService.deleteEgg(this.flockId, key)
-      .catch(error => console.log(error));
+    if (window.confirm('Are you sure? Press OK to delete the egg.')) {
+      this.eggService.deleteEgg(this.flockId, key)
+        .catch(error => console.log(error));
+    }
   }
 
   private setNavDates(date: string) {

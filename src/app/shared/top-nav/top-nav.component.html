@@ -6,14 +6,6 @@
     <a class="navbar-item" routerLink="/flock">
       {{ currentFlock?.name || 'Clucker'}}
     </a>
-    <!-- <div class="navbar-item">
-      <a class="button is-small is-primary is-outlined" routerLink="/add">
-        <span class="icon">
-          <i class="fa fa-plus"></i>
-        </span>
-        <span>Egg</span>
-      </a>
-    </div> -->
 
     <div *ngIf="user" class="navbar-burger burger" (click)="toggleCollapse()" [ngClass]="{'is-active': show}" data-target="navMenuTransparentExample">
       <span></span>
@@ -30,16 +22,6 @@
               Eggs
             </div>
             <div class="navbar-dropdown">
-              <div class="navbar-item">
-                  <a class="button is-small is-primary" routerLink="/add" (click)="toggleCollapse()">
-                      <span class="icon">
-                          <i class="fa fa-plus" aria-hidden="true"></i>
-                      </span>
-                      <span>Egg</span>
-                  </a>
-              </div>
-
-              <div class="navbar-divider"></div>
               <a class="navbar-item" [routerLink]="['/eggs/day', monthString + '-' + dayString]" (click)="toggleCollapse()">
                       <span class="icon">
                           <i class="fa fa-list" aria-hidden="true"></i>

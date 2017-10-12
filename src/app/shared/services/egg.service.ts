@@ -16,12 +16,7 @@ export class EggService {
   }
 
   getEggsByChickenId(flockId: string, chickenId: string) {
-    return this.db.list(`eggs/${flockId}`, {
-      query: {
-        orderByChild: 'chickenId',
-        equalTo: chickenId
-      }
-    });
+    return this.eggsByChickenId(flockId, chickenId);
   }
 
   getEggsByDate(flockId: string, dateString: string) {
@@ -41,6 +36,24 @@ export class EggService {
   deleteEgg(flockId: string, eggId: string) {
     const ref = this.db.object(`eggs/${flockId}/${eggId}`);
     return ref.remove();
+  }
+
+  deleteEggsByFlockId(flockId: string) {
+    return this.db.object(`eggs/${flockId}`).set(null);
+  }
+
+  deleteEggsByChickenId(flockId: string, chickenId: string) {
+    const eggsRef = this.eggsByChickenId(flockId, chickenId);
+    return eggsRef.remove();
+  }
+
+  private eggsByChickenId(flockId: string, chickenId: string) {
+    return this.db.list(`eggs/${flockId}`, {
+      query: {
+        orderByChild: 'chickenId',
+        equalTo: chickenId
+      }
+    });
   }
 
 }

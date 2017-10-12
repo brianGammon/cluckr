@@ -44,8 +44,10 @@ export class FlockComponent implements OnInit {
   }
 
   deleteChicken(key) {
-    this.chickenService.deleteChicken(this.flockId, key)
+    if (window.confirm('Are you sure? Press OK to delete the chicken.')) {
+      this.chickenService.deleteChicken(this.flockId, key)
       .catch(err => console.log(err));
+    }
   }
 
   buildStats(eggs: Egg[]): FlockStats {

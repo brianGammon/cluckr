@@ -15,16 +15,30 @@
     </div>
   </div>
 
-  <nav class="panel">
-    <a *ngFor="let flock of flocks" class="panel-block is-active" (click)="selectFlock(flock.$key)">
-      <span>{{ flock.name }}</span>
-      <span *ngIf="flock.$key === user.currentFlockId">
-        <span class="icon has-text-success">
-          <i class="fa fa-check-circle" aria-hidden="true"></i>
-        </span> Active
-      </span>
-    </a>
-  </nav>
+  <div class="panel">
+    <div *ngFor="let flock of flocks" class="panel-block">
+      <div class="level is-mobile wide">
+        <div class="level-left">
+          <div class="level-item" (click)="selectFlock(flock.$key)">
+              <span>{{ flock.name }}</span>
+              <span *ngIf="flock.$key === user.currentFlockId" class="has-text-success">
+                <span class="icon">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i>
+                </span> Active
+              </span>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+              <button class="delete" (click)="deleteFlock(flock.$key)"></button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
 
   <hr>
 </div>
@@ -37,19 +51,19 @@
   </div>
 </div>
 <div class="field has-addons">
-    <div class="control wide">
-      <input [(ngModel)]="newFlockName" class="input" type="text" placeholder="Enter a name for your flock">
-    </div>
-    <div class="control">
-        <a class="button is-light" (click)="addFlock()">
-            <span class="icon">
-                <i class="fa fa-plus"></i>
-              </span>
-          <span>New Flock</span>
-          </a>
-    </div>
+  <div class="control wide">
+    <input [(ngModel)]="newFlockName" class="input" type="text" placeholder="Enter a name for your flock">
   </div>
-  <hr>
+  <div class="control">
+    <a class="button is-light" (click)="addFlock()">
+      <span class="icon">
+        <i class="fa fa-plus"></i>
+      </span>
+      <span>New</span>
+    </a>
+  </div>
+</div>
+<hr>
 <div class="level is-mobile">
   <div class="level-left">
     <div class="level-item">
@@ -58,19 +72,28 @@
   </div>
 </div>
 
-    <div class="field has-addons">
-        <div class="control wide">
-          <input [(ngModel)]="joinFlockId" class="input" type="text" placeholder="Enter a Flock ID">
-        </div>
-        <div class="control">
-          <a class="button is-light" (click)="joinFlock()">
-              <span class="icon">
-                  <i class="fa fa-link"></i>
-                </span>
-            <span>Join Flock</span>
-          </a>
-        </div>
-      </div>
+<div class="field has-addons">
+  <div class="control wide">
+    <input [(ngModel)]="joinFlockId" class="input" type="text" placeholder="Enter a Flock ID">
+  </div>
+  <div class="control">
+    <a class="button is-light" (click)="joinFlock()">
+      <span class="icon">
+        <i class="fa fa-link"></i>
+      </span>
+      <span>Join</span>
+    </a>
+  </div>
+</div>
+
+<div *ngIf="user?.currentFlockId" class="level">
+  <div class="level-item">
+    Invite someone to join your flock with this ID:
+  </div>
+  <div class="level-item">
+    {{ user.currentFlockId }}
+  </div>
+</div>
 
 
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { EggService } from './egg.service';
 import { Chicken } from '../models';
 
 @Injectable()
@@ -7,6 +8,7 @@ export class ChickenService {
   private uid: string;
 
   constructor(
+    private eggService: EggService,
     private db: AngularFireDatabase
   ) {
   }
@@ -29,7 +31,14 @@ export class ChickenService {
   }
 
   deleteChicken(flockId: string, chickenId: string) {
-    const ref = this.db.object(`chickens/${flockId}/${chickenId}`);
-    return ref.remove();
+     return this.eggService.deleteEggsByChickenId(flockId, chickenId)
+     .then(() => {
+        const ref = this.db.object(`chickens/${flockId}/${chickenId}`);
+        return ref.remove();
+     });
+  }
+
+  deleteChickensByFlockId(flockId: string) {
+    return this.db.object(`chickens/${flockId}`).set(null);
   }
 }

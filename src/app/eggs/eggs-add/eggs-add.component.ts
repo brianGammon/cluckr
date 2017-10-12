@@ -20,7 +20,8 @@ export class EggsAddComponent implements OnInit {
 
   formErrors = {
     'dateLaid': '',
-    'chickenId': ''
+    'chickenId': '',
+    'weight': ''
   };
 
   validationMessages = {
@@ -29,6 +30,10 @@ export class EggsAddComponent implements OnInit {
     },
     'chickenId': {
       'required': 'Chicken ID is required.'
+    },
+    'weight': {
+      'max': 'Weight must less than 120.',
+      'min': 'Weight must be at least 0.'
     }
   };
 
@@ -64,7 +69,10 @@ export class EggsAddComponent implements OnInit {
         Validators.required
       ]
       ],
-      'weight': [''],
+      'weight': ['', [
+        Validators.max(120),
+        Validators.min(0)
+      ]],
       'damaged': [''],
       'notes': ['']
     });

@@ -18,7 +18,6 @@ import { FlocksModule } from './flocks/flocks.module';
 import { EggsModule } from './eggs/eggs.module';
 import { ChickensModule } from './chickens/chicken.module';
 import { UsersModule } from './users/users.module';
-import { CalendarModule } from 'angular-calendar';
 
 
 @NgModule({
@@ -35,8 +34,7 @@ import { CalendarModule } from 'angular-calendar';
     ChickensModule,
     UsersModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
-    CalendarModule.forRoot()
+    AngularFireDatabaseModule
   ],
   bootstrap: [
     AppComponent

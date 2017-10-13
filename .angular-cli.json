@@ -20,8 +20,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
       "styles": [
-        "styles.scss",
-        "../node_modules/angular-calendar/dist/css/angular-calendar.css"
+        "../node_modules/angular-calendar/dist/css/angular-calendar.css",
+        "styles.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

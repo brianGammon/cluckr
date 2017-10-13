@@ -4,3 +4,17 @@
 .footer {
   padding: 1.5rem 1.5rem 1.5rem;
 }
+
+@media screen and (max-width: 768px) {
+  .cal-header {
+    font-size: xx-small;
+  }
+}
+
+.cal-day-badge {
+  display: none !important;
+}
+
+.cal-month-view .cal-day-cell.cal-today .cal-day-number {
+  font-size: 1.2em !important;
+}

@@ -3,12 +3,17 @@
   <div class="columns">
 
 
-    <main class="column is-8">
+    <!-- <main class="column is-8">
       <router-outlet></router-outlet>
     </main>
 
     <aside class="column is-1">
-    </aside>
+    </aside> -->
+
+    <mwl-calendar-month-view
+      [viewDate]="viewDate"
+      [events]="events">
+    </mwl-calendar-month-view>
 
   </div>
 </div>

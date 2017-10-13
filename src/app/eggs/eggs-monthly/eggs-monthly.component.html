@@ -4,14 +4,53 @@
       <p class="title is-6">Eggs by Month</p>
     </div>
   </div>
+  <div class="level-right">
+      <div class="level-item has-text-centered">
+        <a class="button is-small is-primary" routerLink="/add">
+          <span class="icon">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </span>
+          <span>Egg</span>
+        </a>
+      </div>
+    </div>
 </div>
-<div class="container has-text-centered">
 
-  <p class="subtitle is-6">October 2017</p>
-</div>
+<div *ngIf="events | async; let events; else loading">
+  <div class="level is-mobile">
+    <div class="level-item has-text-centered">
+      <a class="button" [routerLink]="['/eggs/month', previousMonth]">
+        <span class="icon is-small">
+          <i class="fa fa-chevron-left"></i>
+        </span>
+      </a>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Date</p>
+        <p class="title is-4">{{ viewDate | date:'MMMM yyyy'}}</p>
+      </div>
+    </div>
 
-<div *ngIf="events | async; let events">
+    <div class="level-item has-text-centered">
+      <a class="button" [routerLink]="['/eggs/month', nextMonth]">
+        <span class="icon is-small">
+          <i class="fa fa-chevron-right"></i>
+        </span>
+      </a>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Eggs</p>
+        <p class="title is-4">{{ events.length }}</p>
+      </div>
+      </div>
+  </div>
+
   <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (dayClicked)="goToDate($event.day.date)" (eventClicked)="eventClicked($event)">
-</mwl-calendar-month-view>
+  </mwl-calendar-month-view>
 </div>
 
+<ng-template #loading>
+  <loading-spinner></loading-spinner>
+</ng-template>

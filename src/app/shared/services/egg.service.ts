@@ -28,12 +28,12 @@ export class EggService {
     });
   }
 
-  getEggsByMonth(flockId: string, dateString: string) {
+  getEggsByDateRange(flockId: string, start: string, end: string) {
     return this.db.list(`eggs/${flockId}`, {
       query: {
         orderByChild: 'date',
-        startAt: '2017-10-01',
-        endAt: '2017-10-31'
+        startAt: start,
+        endAt: end
       }
     });
   }

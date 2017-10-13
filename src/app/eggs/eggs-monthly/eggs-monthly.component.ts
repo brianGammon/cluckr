@@ -51,7 +51,14 @@ export class EggsMonthlyComponent implements OnInit {
           this.setNavDates(params['date']);
           this.dateString = params['date'];
 
-          this.eggService.getEggsByMonth(this.flockId, this.dateString).subscribe((eggs: Egg[]) => {
+
+          const selectedDate = moment(this.dateString);
+          this.viewDate = selectedDate.toDate();
+          const startOfMonth = selectedDate.startOf('month').format('YYYY-MM-DD');
+          const endOfMonth   = selectedDate.endOf('month').format('YYYY-MM-DD');
+          console.log(`Start: ${startOfMonth}, End: ${endOfMonth}`);
+
+          this.eggService.getEggsByDateRange(this.flockId, startOfMonth, endOfMonth).subscribe((eggs: Egg[]) => {
             const eggEvents = [];
             eggs.forEach(egg => {
               const title = egg.weight ? `${egg.weight}g Egg` : 'Egg';
@@ -80,8 +87,8 @@ export class EggsMonthlyComponent implements OnInit {
   private setNavDates(date: string) {
     const currDate = moment.utc(date);
 
-    this.previousMonth = currDate.subtract(1, 'days').format('YYYY-MM-DD').toString();
+    this.previousMonth = currDate.subtract(1, 'month').format('YYYY-MM').toString();
 
-    this.nextMonth = currDate.add(2, 'days').format('YYYY-MM-DD').toString();
+    this.nextMonth = currDate.add(2, 'month').format('YYYY-MM').toString();
   }
 }

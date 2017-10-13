@@ -28,6 +28,16 @@ export class EggService {
     });
   }
 
+  getEggsByMonth(flockId: string, dateString: string) {
+    return this.db.list(`eggs/${flockId}`, {
+      query: {
+        orderByChild: 'date',
+        startAt: '2017-10-01',
+        endAt: '2017-10-31'
+      }
+    });
+  }
+
   saveEgg(flockId: string, egg: Egg) {
     const ref = this.db.list(`eggs/${flockId}`);
     return ref.push(egg);

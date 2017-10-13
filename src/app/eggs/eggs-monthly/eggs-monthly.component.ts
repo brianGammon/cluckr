@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
@@ -37,6 +37,7 @@ export class EggsMonthlyComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
     private eggService: EggService
   ) { }
@@ -50,13 +51,14 @@ export class EggsMonthlyComponent implements OnInit {
           this.setNavDates(params['date']);
           this.dateString = params['date'];
 
-          this.eggService.getEggsByDate(this.flockId, this.dateString).subscribe(eggs => {
+          this.eggService.getEggsByMonth(this.flockId, this.dateString).subscribe((eggs: Egg[]) => {
             const eggEvents = [];
             eggs.forEach(egg => {
+              const title = egg.weight ? `${egg.weight}g Egg` : 'Egg';
               eggEvents.push({
-                title: 'Click me',
+                title,
                 color: this.colors.blue,
-                start: moment('2017-10-10').toDate()
+                start: moment(egg.date).toDate()
               });
             });
             this.events = Observable.of(eggEvents);
@@ -64,6 +66,15 @@ export class EggsMonthlyComponent implements OnInit {
         });
       }
     });
+  }
+
+  goToDate(date: Date) {
+    const dateString = moment(date).format('YYYY-MM-DD');
+    this.router.navigateByUrl(`/eggs/day/${dateString}`);
+  }
+
+  eventClicked({ event }: { event: CalendarEvent }): void {
+    this.goToDate(event.start);
   }
 
   private setNavDates(date: string) {

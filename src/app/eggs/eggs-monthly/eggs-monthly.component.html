@@ -8,11 +8,10 @@
 <div class="container has-text-centered">
 
   <p class="subtitle is-6">October 2017</p>
-
 </div>
 
 <div *ngIf="events | async; let events">
-  <mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+  <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (dayClicked)="goToDate($event.day.date)" (eventClicked)="eventClicked($event)">
 </mwl-calendar-month-view>
 </div>
 

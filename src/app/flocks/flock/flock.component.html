@@ -106,11 +106,9 @@
 
       <div *ngFor="let chicken of chickens" class="media">
         <div class="media-left">
-          <p class="image is-64x64">
-            <a [routerLink]="['/chicken', chicken.$key]">
-              <img [src]="chicken.photo ? chicken.photo : '/assets/images/default-profile-photo.png'">
-            </a>
-          </p>
+          <a [routerLink]="['/chicken', chicken.$key]">
+            <div class="profile-image-sm" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}"></div>
+          </a>
         </div>
         <div class="media-content">
           <div class="content">

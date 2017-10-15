@@ -21,9 +21,9 @@
   </div>
   <article class="media">
     <figure class="media-left">
-      <p class="image is-128x128">
-        <img [src]="chicken.photo ? chicken.photo : '/assets/images/default-profile-photo.png'">
-      </p>
+      <div class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
+
+      </div>
     </figure>
     <div class="media-content">
       <div class="content">

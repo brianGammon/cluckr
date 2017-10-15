@@ -3,5 +3,6 @@ export class Chicken {
   name: string;
   hatched: string;
   breed: string;
-  photo: string;
+  photoUrl: string;
+  thumbnailUrl: string;
 }

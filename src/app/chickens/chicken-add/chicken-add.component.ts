@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { UserService, ChickenService } from '../../shared/services';
+import { UserService, ChickenService, ImageService, UploadService } from '../../shared/services';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Chicken } from '../../shared/models';
+import { User, Chicken, ImageProcessingResult, UploadResult } from '../../shared/models';
 
 @Component({
   templateUrl: './chicken-add.component.html',
@@ -12,6 +12,8 @@ import { Chicken } from '../../shared/models';
 export class ChickenAddComponent implements OnInit {
   chickenForm: FormGroup;
   location: Location;
+  imageData: ImageProcessingResult;
+  loading = false;
 
   formErrors = {
     'name': ''
@@ -28,7 +30,9 @@ export class ChickenAddComponent implements OnInit {
     private locationService: Location,
     private fb: FormBuilder,
     private userService: UserService,
-    private chickenService: ChickenService
+    private chickenService: ChickenService,
+    private imageService: ImageService,
+    private uploadService: UploadService
   ) {
     this.location = locationService;
   }
@@ -51,23 +55,39 @@ export class ChickenAddComponent implements OnInit {
 
   addChicken() {
     this.userService.currentUser.take(1).subscribe(user => {
-      if (user) {
-        const chicken = new Chicken();
-        chicken.name = this.chickenForm.get('name').value;
-        chicken.breed = this.chickenForm.get('breed').value;
-        chicken.hatched = this.chickenForm.get('hatched').value;
-        chicken.photo = this.chickenForm.get('photo').value;
-
-        this.chickenService.addChicken(user.currentFlockId, chicken)
-          .then(data => {
-            console.log(data);
-            this.router.navigateByUrl('/flock');
-          })
-          .catch(error => console.log(error));
-      } else {
-        console.log('Not logged in, cannot add chicken');
+      if (user && this.chickenForm.valid) {
+        // Save resized images to storage
+        if (this.imageData && this.imageData.result === 'success') {
+          this.loading = true;
+          console.log('uploading images');
+          // User selcted an image
+          this.uploadService.pushUpload(this.imageData.imageSet, user['$key'], user.currentFlockId).then(uploadResult => {
+            this.saveChicken(user, uploadResult);
+          });
+        } else {
+          // No photo added
+          this.saveChicken(user);
+        }
       }
     });
+  }
+
+  resetPreview() {
+    this.imageData = null;
+  }
+
+  onImageChange(event) {
+    this.imageData = null;
+    this.loading = true;
+    if (event.target.files[0]) {
+      this.imageService.processImage(event.target.files[0]).then(data => {
+        this.imageData = data;
+        this.loading = false;
+      }).catch(err => {
+        console.log(err);
+        this.loading = false;
+      });
+    }
   }
 
   // Updates validation state on form changes.
@@ -89,5 +109,24 @@ export class ChickenAddComponent implements OnInit {
         }
       }
     }
+  }
+
+  private saveChicken(user: User, uploadResult?: UploadResult) {
+    const chicken = new Chicken();
+    chicken.name = this.chickenForm.get('name').value;
+    chicken.breed = this.chickenForm.get('breed').value;
+    chicken.hatched = this.chickenForm.get('hatched').value;
+    chicken.photoUrl = uploadResult ? uploadResult.imageUrl : '';
+    chicken.thumbnailUrl = uploadResult ? uploadResult.thumbnailUrl : '';
+
+    this.chickenService.addChicken(user.currentFlockId, chicken)
+      .then(data => {
+        this.loading = false;
+        this.router.navigateByUrl('/flock');
+      })
+      .catch(error => {
+        console.log(error);
+        this.loading = false;
+      });
   }
 }

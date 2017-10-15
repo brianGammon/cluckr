@@ -28,12 +28,39 @@
     {{ formErrors.hatched }}
   </div> -->
 
-  <label for="photo">Photo URL</label>
-  <input type="text" id="photo" class="input" formControlName="photo">
+  <label for="photo">Photo</label>
+  <!-- <input type="text" id="photo" class="input" formControlName="photo"> -->
+  <div class="level">
+    <div class="level-left">
+        <div *ngIf="!loading" class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (imageData ? imageData.preview : '/assets/images/default-profile-photo.png') + ')'}"></div>
+    </div>
+  </div>
+  <loading-spinner *ngIf="loading"></loading-spinner>
 
-  <!-- <div *ngIf="formErrors.photo" class="help is-danger">
-    {{ formErrors.photo }}
-  </div> -->
+
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="file is-small">
+          <label class="file-label">
+            <input class="file-input" (change)="onImageChange($event)" type="file" accept="image/*" name="photo">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fa fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Choose a photo...
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="level-item">
+        <a class="button is-small" (click)="resetPreview()">Clear</a>
+      </div>
+    </div>
+  </div>
+
 
   <button type="submit" class="button is-primary" [disabled]="!chickenForm.valid">Submit</button>
   <a class="button" (click)="location.back()">Cancel</a>

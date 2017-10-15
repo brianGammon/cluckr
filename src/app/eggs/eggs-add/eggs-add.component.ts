@@ -32,8 +32,8 @@ export class EggsAddComponent implements OnInit {
       'required': 'Chicken ID is required.'
     },
     'weight': {
-      'max': 'Weight must less than 120.',
-      'min': 'Weight must be at least 0.'
+      'max': 'Weight must less than 110.',
+      'min': 'Weight must be at least 20.'
     }
   };
 
@@ -70,8 +70,8 @@ export class EggsAddComponent implements OnInit {
       ]
       ],
       'weight': ['', [
-        Validators.max(120),
-        Validators.min(0)
+        Validators.max(110),
+        Validators.min(20)
       ]],
       'damaged': [''],
       'notes': ['']

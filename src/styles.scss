@@ -18,3 +18,17 @@
 .cal-month-view .cal-day-cell.cal-today .cal-day-number {
   font-size: 1.2em !important;
 }
+
+.profile-image {
+  background-size:cover;
+  background-repeat: no-repeat;
+  width: 128px;
+  height: 128px;
+}
+
+.profile-image-sm {
+  background-size:cover;
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 64px;
+}

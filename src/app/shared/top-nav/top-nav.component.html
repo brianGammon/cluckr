@@ -44,7 +44,7 @@
           My Flocks
         </div>
         <div class="navbar-dropdown">
-          <a *ngFor="let flock of flocks" class="navbar-item " (click)="setCurrentFlockId(flock.$key); toggleCollapse()">
+          <a *ngFor="let flock of flocks" class="navbar-item" routerLink="/flock" (click)="setCurrentFlockId(flock.$key); toggleCollapse()">
                 {{flock.name}} <span *ngIf="flock.$key === user.currentFlockId" class="icon has-text-success">
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
                 </span>

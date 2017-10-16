@@ -53,8 +53,19 @@ export class EggService {
   }
 
   deleteEggsByChickenId(flockId: string, chickenId: string) {
-    const eggsRef = this.eggsByChickenId(flockId, chickenId);
-    return eggsRef.remove();
+    const promise = new Promise<boolean>((resolve, reject) => {
+      const eggsRef = this.eggsByChickenId(flockId, chickenId);
+      eggsRef.subscribe(eggs => {
+        eggs.forEach(egg => {
+          this.db.object(`/eggs/${flockId}/${egg['$key']}`).remove();
+        });
+        resolve(true);
+      }, error => {
+        console.log('error deleting eggs');
+        reject(error);
+      });
+    });
+    return promise;
   }
 
   private eggsByChickenId(flockId: string, chickenId: string) {

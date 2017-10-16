@@ -45,15 +45,19 @@ export class UserLoginComponent implements OnInit {
   }
 
   signup(): void {
-    this.userService.signUp(this.userForm.value['email'], this.userForm.value['password']).then(() => {
-      this.router.navigateByUrl('/flocks');
-    });
+    if (this.userForm.valid) {
+      this.userService.signUp(this.userForm.value['email'], this.userForm.value['password']).then(() => {
+        this.router.navigateByUrl('/flocks');
+      });
+    }
   }
 
   login(): void {
-    this.userService.signIn(this.userForm.value['email'], this.userForm.value['password']).then(data => {
-      this.router.navigateByUrl('/flock');
-    });
+    if (this.userForm.valid) {
+      this.userService.signIn(this.userForm.value['email'], this.userForm.value['password']).then(data => {
+        this.router.navigateByUrl('/flock');
+      });
+    }
   }
 
   resetPassword() {

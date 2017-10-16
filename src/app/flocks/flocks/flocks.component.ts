@@ -24,8 +24,6 @@ export class FlocksComponent implements OnInit {
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
-      console.log(user);
-
       if (user) {
         this.user = user;
         this.flocks = this.flockService.getFlocks(user['$key']);

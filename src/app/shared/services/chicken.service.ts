@@ -35,7 +35,8 @@ export class ChickenService {
      .then(() => {
         const ref = this.db.object(`chickens/${flockId}/${chickenId}`);
         return ref.remove();
-     });
+     })
+     .catch(error => console.log(error));
   }
 
   deleteChickensByFlockId(flockId: string) {

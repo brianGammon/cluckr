@@ -83,20 +83,22 @@ export class EggsAddComponent implements OnInit {
   }
 
   addEgg() {
-    const egg = new Egg();
-    egg.date =  this.eggForm.value['dateLaid'];
-    egg.chickenId = this.eggForm.value['chickenId'];
-    egg.weight = this.eggForm.value['weight'];
-    egg.damaged = !!this.eggForm.value['damaged'];
-    egg.notes = this.eggForm.value['notes'];
-    egg.userId = this.userId;
-    egg.modified = moment().utc().toISOString();
+    if (this.eggForm.valid) {
+      const egg = new Egg();
+      egg.date = this.eggForm.value['dateLaid'];
+      egg.chickenId = this.eggForm.value['chickenId'];
+      egg.weight = this.eggForm.value['weight'];
+      egg.damaged = !!this.eggForm.value['damaged'];
+      egg.notes = this.eggForm.value['notes'];
+      egg.userId = this.userId;
+      egg.modified = moment().utc().toISOString();
 
-    this.eggService.saveEgg(this.flockId, egg)
-      .then(data => {
-        this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
-      })
-      .catch(error => console.log(error));
+      this.eggService.saveEgg(this.flockId, egg)
+        .then(data => {
+          this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
+        })
+        .catch(error => console.log(error));
+    }
   }
 
   // Updates validation state on form changes.

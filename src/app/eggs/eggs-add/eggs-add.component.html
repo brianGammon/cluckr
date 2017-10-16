@@ -40,7 +40,7 @@
         <div class="field">
         <label class="label">Weight (g)</label>
         <div class="control">
-          <input type="number" pattern="[0-9]*" id="weight" class="input" formControlName="weight">
+          <input type="number" id="weight" class="input" formControlName="weight">
         </div>
         <p *ngIf="formErrors.weight" class="help is-danger">
           {{ formErrors.weight }}

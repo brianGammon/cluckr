@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 import { EggService } from './egg.service';
 import { Chicken } from '../models';
 
@@ -13,7 +14,7 @@ export class ChickenService {
   ) {
   }
 
-  getChicken(flockId: string, chickenId: string) {
+  getChicken(flockId: string, chickenId: string): Observable<Chicken> {
     return this.db.object(`chickens/${flockId}/${chickenId}`);
   }
 

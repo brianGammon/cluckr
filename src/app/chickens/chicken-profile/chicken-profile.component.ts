@@ -29,16 +29,18 @@ export class ChickenProfileComponent implements OnInit {
       this.userService.currentUser.subscribe(user => {
         if (user) {
           this.flockId = user.currentFlockId;
-          this.chicken = this.chickenService.getChicken(this.flockId, chickenId);
-
-          this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(eggs => {
-            this.total = eggs.length;
-            if (this.total > 0) {
-              const stats = this.buildStats(eggs);
-              this.heaviest = stats.heaviest;
-              this.longestStreak = stats.longestStreak;
-            }
-          });
+          this.chicken = this.chickenService.getChicken(this.flockId, chickenId)
+            .map(chicken => {
+              this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(eggs => {
+                this.total = eggs.length;
+                if (this.total > 0) {
+                  const stats = this.buildStats(eggs);
+                  this.heaviest = stats.heaviest;
+                  this.longestStreak = stats.longestStreak;
+                }
+              });
+              return chicken;
+            });
         }
       });
     });
@@ -50,17 +52,19 @@ export class ChickenProfileComponent implements OnInit {
   buildStats(eggs: Egg[]) {
     let heaviest = 0;
     let heaviestEgg = null;
-
-    _.sortBy(eggs, 'date');
-
     let streakCount = 0;
     let longestStreak = 0;
     let lastEggDate = null;
-    _.forEach(eggs, function (egg) {
+
+    const sortedEggs = _.sortBy(eggs, 'date');
+    _.forEach(sortedEggs, function (egg) {
+      let resetStreak = false;
+
       // Determine the longest streak
       if (!lastEggDate) {
         // first one, start a streak
         streakCount = 1;
+        longestStreak = 1;
         lastEggDate = egg.date;
       } else {
         // see if this egg date is 1 day past
@@ -73,11 +77,18 @@ export class ChickenProfileComponent implements OnInit {
           streakCount++;
         } else if (daysBetween > 1) {
           // current streak over
-          if (streakCount > longestStreak) {
-            longestStreak = streakCount;
-            streakCount = 0;
-          }
+          resetStreak = true;
         }
+
+        if (streakCount > longestStreak) {
+          longestStreak = streakCount;
+        }
+
+        if (resetStreak) {
+          streakCount = 1;
+          resetStreak = false;
+        }
+
         lastEggDate = egg.date;
       }
 

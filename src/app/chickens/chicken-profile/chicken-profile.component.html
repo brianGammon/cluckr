@@ -1,4 +1,4 @@
-<div *ngIf="chicken | async; let chicken">
+<div *ngIf="chicken | async; let chicken; else loading">
   <div class="level is-mobile">
     <div class="level-left">
       <div class="level-item">
@@ -62,7 +62,12 @@
         </div>
       </div>
     </div>
-    <div class="level is-mobile">
+    <div *ngIf="total === 0" class="level is-mobile">
+      <div class="level-item">
+        <em>No Eggs Logged Yet</em>
+      </div>
+    </div>
+    <div *ngIf="total > 0" class="level is-mobile">
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Eggs</p>
@@ -86,5 +91,8 @@
       </div>
     </div>
   </div>
-
 </div>
+
+<ng-template #loading>
+  <loading-spinner></loading-spinner>
+</ng-template>

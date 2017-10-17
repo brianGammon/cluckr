@@ -4,15 +4,6 @@
   </div>
 
   <div *ngIf="flock.name">
-    <!-- <div class="level">
-      <div class="level-item">
-
-        <p>{{ flock.name }}</p>
-
-
-      </div>
-
-    </div> -->
     <div *ngIf="chickens | async; let chickens; else loading" class="content chicken-list">
       <div *ngIf="chickens.length > 0">
         <div class="level is-mobile">

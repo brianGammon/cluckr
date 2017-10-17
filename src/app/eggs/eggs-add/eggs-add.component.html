@@ -1,4 +1,4 @@
-<form [formGroup]="eggForm" (ngSubmit)="addEgg()">
+<form *ngIf="chickens | async; let chickens; else loading" [formGroup]="eggForm" (ngSubmit)="addEgg()">
 
   <div class="level is-mobile">
     <div class="level-left">
@@ -25,7 +25,7 @@
       <div class="select">
         <select id="chickenId" formControlName="chickenId" required>
           <option value="">Select a chicken</option>
-          <option *ngFor="let chicken of chickens | async" value="{{ chicken.$key }}">{{ chicken.name}}</option>
+          <option *ngFor="let chicken of chickens" value="{{ chicken.$key }}">{{ chicken.name}}</option>
         </select>
       </div>
     </div>
@@ -40,7 +40,7 @@
         <div class="field">
         <label class="label">Weight (g)</label>
         <div class="control">
-          <input type="number" id="weight" class="input" formControlName="weight">
+          <input type="text" id="weight" class="input" formControlName="weight">
         </div>
         <p *ngIf="formErrors.weight" class="help is-danger">
           {{ formErrors.weight }}
@@ -76,3 +76,7 @@
   <a class="button" (click)="location.back()">Cancel</a>
 
 </form>
+
+<ng-template #loading>
+  <loading-spinner></loading-spinner>
+</ng-template>

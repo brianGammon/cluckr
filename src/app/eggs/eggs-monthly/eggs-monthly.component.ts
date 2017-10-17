@@ -61,7 +61,7 @@ export class EggsMonthlyComponent implements OnInit {
           this.eggService.getEggsByDateRange(this.flockId, startOfMonth, endOfMonth).subscribe((eggs: Egg[]) => {
             const eggEvents = [];
             eggs.forEach(egg => {
-              const title = egg.weight ? `${egg.weight}g Egg` : 'Egg';
+              const title = egg.chickenName + ' ' + (egg.weight ? `${egg.weight}g` : 'egg');
               eggEvents.push({
                 title,
                 color: this.colors.blue,

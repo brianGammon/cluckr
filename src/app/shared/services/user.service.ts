@@ -38,13 +38,11 @@ export class UserService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
         this.updateUserData(user);
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   signIn(email: string, password: string) {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .catch(error => console.log(error));
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
   resetPassword(email: string) {

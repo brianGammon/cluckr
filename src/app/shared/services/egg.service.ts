@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { Egg } from '../models';
 
@@ -15,7 +16,7 @@ export class EggService {
     return this.db.list(`eggs/${flockId}`);
   }
 
-  getEggsByChickenId(flockId: string, chickenId: string) {
+  getEggsByChickenId(flockId: string, chickenId: string): Observable<Egg[]> {
     return this.eggsByChickenId(flockId, chickenId);
   }
 

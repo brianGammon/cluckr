@@ -4,20 +4,7 @@
       <div class="level-item">
         <p class="title is-6">Chicken Profile</p>
       </div>
-
     </div>
-    <div class="level-right">
-      <div class="level-item has-text-centered">
-        <a class="button is-small is-primary" routerLink="/add" [queryParams]="{chickenId: chicken.$key}">
-          <span class="icon">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </span>
-          <span>Egg</span>
-        </a>
-      </div>
-
-    </div>
-
   </div>
   <article class="media">
     <figure class="media-left">
@@ -64,6 +51,16 @@
           <p class="heading">Stats</p>
         </div>
       </div>
+      <div class="level-right">
+        <div class="level-item has-text-centered">
+          <a class="button is-small is-primary" routerLink="/add" [queryParams]="{chickenId: chicken.$key}">
+            <span class="icon">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Egg</span>
+          </a>
+        </div>
+      </div>
     </div>
     <div class="level is-mobile">
       <div class="level-item has-text-centered">
@@ -82,9 +79,9 @@
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">Avg</p>
-          <p class="title is-4">2.2</p>
-          <p class="subtitle is-6">Per Day</p>
+          <p class="heading">Longest Streak</p>
+          <p class="title is-4">{{ longestStreak }}</p>
+          <p class="subtitle is-6">{{ longestStreak === 1 ? 'Day' : 'Days' }}</p>
         </div>
       </div>
     </div>

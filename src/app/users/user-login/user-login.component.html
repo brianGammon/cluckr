@@ -1,4 +1,6 @@
-
+<div *ngIf="serviceError" class="notification is-danger">
+  {{ serviceError }}
+</div>
 <form [formGroup]="userForm"  *ngIf="newUser"  (ngSubmit)="signup()">
 
   <p class="title is-6">Sign Up</p>
@@ -46,8 +48,8 @@
 
   <button type="submit" class="button is-primary" [disabled]="!userForm.valid">Submit</button>
   <div><a (click)="toggleForm()">Need to sign up instead?</a></div>
-  <a *ngIf="!passReset && userForm.controls.email.valid" class="help is-info" (click)="resetPassword()">Reset Password for {{userForm.value.email}}?</a>
-  <p *ngIf="passReset" class="help is-info">Reset requested. Check your email instructions.</p>
+  <!-- <a *ngIf="!passReset && userForm.controls.email.valid" class="help is-info" (click)="resetPassword()">Reset Password for {{userForm.value.email}}?</a>
+  <p *ngIf="passReset" class="help is-info">Reset requested. Check your email instructions.</p> -->
 
 
 </form>

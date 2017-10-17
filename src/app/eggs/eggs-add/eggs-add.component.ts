@@ -32,8 +32,9 @@ export class EggsAddComponent implements OnInit {
       'required': 'Chicken ID is required.'
     },
     'weight': {
-      'max': 'Weight must less than 110.',
-      'min': 'Weight must be at least 20.'
+      'max': 'Max value is 110.',
+      'min': 'Min value is 20.',
+      'pattern': 'Use number format "0.0".'
     }
   };
 
@@ -57,7 +58,7 @@ export class EggsAddComponent implements OnInit {
       if (user) {
         this.userId = user['$key'];
         this.flockId = user.currentFlockId;
-        this.chickens = this.chickenService.getChickensList(user.currentFlockId);
+        this.chickens = this.chickenService.getChickensList(user.currentFlockId).take(1).shareReplay();
       }
     });
 
@@ -71,7 +72,8 @@ export class EggsAddComponent implements OnInit {
       ],
       'weight': ['', [
         Validators.max(110),
-        Validators.min(20)
+        Validators.min(20),
+        Validators.pattern(/^\d+([.]\d{0,1})?$/)
       ]],
       'damaged': [''],
       'notes': ['']
@@ -84,20 +86,25 @@ export class EggsAddComponent implements OnInit {
 
   addEgg() {
     if (this.eggForm.valid) {
-      const egg = new Egg();
-      egg.date = this.eggForm.value['dateLaid'];
-      egg.chickenId = this.eggForm.value['chickenId'];
-      egg.weight = this.eggForm.value['weight'];
-      egg.damaged = !!this.eggForm.value['damaged'];
-      egg.notes = this.eggForm.value['notes'];
-      egg.userId = this.userId;
-      egg.modified = moment().utc().toISOString();
+      this.chickens.subscribe(chickens => {
+        const id = this.eggForm.value['chickenId'];
+        const chick = chickens.find(chicken => chicken['$key'] === id);
 
-      this.eggService.saveEgg(this.flockId, egg)
-        .then(data => {
-          this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
-        })
-        .catch(error => console.log(error));
+        const egg = new Egg();
+        egg.date = this.eggForm.value['dateLaid'];
+        egg.chickenId = id;
+        egg.chickenName = chick ? chick.name : id;
+        egg.weight = this.eggForm.value['weight'];
+        egg.damaged = !!this.eggForm.value['damaged'];
+        egg.notes = this.eggForm.value['notes'];
+        egg.userId = this.userId;
+        egg.modified = moment().utc().toISOString();
+        this.eggService.saveEgg(this.flockId, egg)
+          .then(data => {
+            this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
+          })
+          .catch(error => console.log(error));
+      });
     }
   }
 

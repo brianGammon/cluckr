@@ -66,27 +66,28 @@
       <div *ngFor="let egg of eggs" class="media">
         <div class="media-content">
           <div class="content">
-            <div class="level is-mobile">
-              <div class="level-left">
-                <div class="level-item">
-                  <a [routerLink]="['/chicken', egg.chickenId]">{{ chickens[egg.chickenId].name }}</a>
-                </div>
+            <div class="columns is-mobile">
+              <div class="column is-two-thirds">
+                <a [routerLink]="['/chicken', egg.chickenId]">{{ chickens[egg.chickenId].name }}</a>
               </div>
-              <div *ngIf="egg.weight" class="level-item">
+              <div *ngIf="egg.weight" class="column">
                 <span>
                   {{ egg.weight }}g
                 </span>
+              </div>
+              <div *ngIf="egg.damaged" class="column">
                 <span *ngIf="egg.damaged" class="icon has-text-danger">
                   <i class="fa fa-warning"></i>
                 </span>
               </div>
             </div>
-            <div *ngIf="egg.notes" class="level is-mobile">
-              <div class="level-left">
-                <div class="level-item">
-                  <em>"{{ egg.notes }}"</em>
-                </div>
+            <div *ngIf="egg.notes" class="columns is-mobile">
+              <div class="column is-offset-1 sticky-note">
+                <span class="icon">
+                  <i class="fa fa-sticky-note-o"></i>
+                </span>
               </div>
+              <div class="content"><em>"{{ egg.notes }}"</em></div>
             </div>
           </div>
         </div>

@@ -75,14 +75,17 @@
                   {{ egg.weight }}g
                 </span>
               </div>
-              <div *ngIf="egg.damaged" class="column">
-                <span *ngIf="egg.damaged" class="icon has-text-danger">
+            </div>
+            <div *ngIf="egg.notes" class="columns is-mobile">
+              <div class="column is-offset-1 is-2 sticky-note">
+                <span class="icon has-text-danger">
                   <i class="fa fa-warning"></i>
                 </span>
               </div>
+              <div class="content">This egg was damaged</div>
             </div>
             <div *ngIf="egg.notes" class="columns is-mobile">
-              <div class="column is-offset-1 sticky-note">
+              <div class="column is-offset-1 is-2 sticky-note">
                 <span class="icon">
                   <i class="fa fa-sticky-note-o"></i>
                 </span>

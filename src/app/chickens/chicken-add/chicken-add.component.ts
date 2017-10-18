@@ -117,7 +117,9 @@ export class ChickenAddComponent implements OnInit {
     chicken.breed = this.chickenForm.get('breed').value;
     chicken.hatched = this.chickenForm.get('hatched').value;
     chicken.photoUrl = uploadResult ? uploadResult.imageUrl : '';
+    chicken.photoPath = uploadResult ? uploadResult.imagePath : '';
     chicken.thumbnailUrl = uploadResult ? uploadResult.thumbnailUrl : '';
+    chicken.thumbnailPath = uploadResult ? uploadResult.thumbnailPath : '';
 
     this.chickenService.addChicken(user.currentFlockId, chicken)
       .then(data => {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { UploadService } from './upload.service';
 import { EggService } from './egg.service';
 import { Chicken } from '../models';
 
@@ -10,6 +11,7 @@ export class ChickenService {
 
   constructor(
     private eggService: EggService,
+    private uploadService: UploadService,
     private db: AngularFireDatabase
   ) {
   }
@@ -31,12 +33,23 @@ export class ChickenService {
     return ref.push(chicken);
   }
 
-  deleteChicken(flockId: string, chickenId: string) {
-     return this.eggService.deleteEggsByChickenId(flockId, chickenId)
+  deleteChicken(flockId: string, chicken: Chicken) {
+     return this.eggService.deleteEggsByChickenId(flockId, chicken['$key'])
      .then(() => {
-        const ref = this.db.object(`chickens/${flockId}/${chickenId}`);
-        return ref.remove();
-     })
+       if (chicken.photoPath) {
+        return this.uploadService.deleteFromPath(chicken.photoPath);
+       } else {
+        return new Promise(resolve => resolve({success: true}));
+       }
+      })
+     .then(() => {
+       if (chicken.thumbnailPath) {
+        this.uploadService.deleteFromPath(chicken.thumbnailPath);
+       } else {
+        return new Promise(resolve => resolve({success: true}));
+       }
+      })
+     .then(() => this.db.object(`chickens/${flockId}/${chicken['$key']}`).remove())
      .catch(error => console.log(error));
   }
 

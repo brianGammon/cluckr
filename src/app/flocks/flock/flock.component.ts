@@ -35,6 +35,7 @@ export class FlockComponent implements OnInit {
         this.flock = this.flockService.getFlock(user.currentFlockId);
         this.chickens = this.chickenService.getChickensList(user.currentFlockId);
         this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
+          this.stats = null;
           if (eggs.length > 0) {
             this.stats = this.buildStats(eggs);
           }
@@ -43,9 +44,9 @@ export class FlockComponent implements OnInit {
     });
   }
 
-  deleteChicken(key) {
+  deleteChicken(chicken: Chicken) {
     if (window.confirm('Are you sure? Press OK to delete the chicken.')) {
-      this.chickenService.deleteChicken(this.flockId, key)
+      this.chickenService.deleteChicken(this.flockId, chicken)
       .catch(err => console.log(err));
     }
   }

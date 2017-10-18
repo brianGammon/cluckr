@@ -74,7 +74,7 @@ export class FlocksComponent implements OnInit {
       if (this.user.currentFlockId === flockId) {
         this.userService.setCurrentFlockId(null);
       }
-      this.flockService.deleteFlock(flockId)
+      this.flockService.deleteFlock(this.user['$key'], flockId)
         .catch(err => console.log(err));
     }
   }

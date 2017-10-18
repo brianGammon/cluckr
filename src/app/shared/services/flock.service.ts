@@ -44,9 +44,10 @@ export class FlockService {
     return ref.update(newObj);
   }
 
-  deleteFlock(flockId: string) {
+  deleteFlock(userId: string, flockId: string) {
     return this.eggService.deleteEggsByFlockId(flockId)
       .then(() => this.chickenService.deleteChickensByFlockId(flockId))
-      .then(() => this.db.object(`flocks/${flockId}`).set(null));
+      .then(() => this.db.object(`flocks/${flockId}`).set(null))
+      .then(() => this.db.object(`deletedFlocks/${userId}/${flockId}`).set(true));
   }
 }

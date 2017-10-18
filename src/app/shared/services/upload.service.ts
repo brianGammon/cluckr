@@ -11,7 +11,8 @@ export class UploadService {
 
   pushUpload(imageSet: ImageSet, userId: string, flockId: string): Promise<UploadResult> {
     const promise = new Promise<UploadResult>((resolve, reject) => {
-      let mainImageUrl = '';
+      let mainImageUrl: string = null;
+      let mainImagePath: string = null;
       const storageRef = firebase.storage().ref();
 
       // Main image first
@@ -27,11 +28,14 @@ export class UploadService {
             'error',
             null,
             null,
+            null,
+            null,
             error
           ));
         },
         () => {
           mainImageUrl = uploadTask.snapshot.downloadURL;
+          mainImagePath = uploadTask.snapshot.metadata.fullPath;
           uploadTask = storageRef.child(`uploads/user:${userId}/flock:${flockId}/${imageSet.thumbnail.name}`).put(imageSet.thumbnail);
           uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot: any) => {
@@ -45,6 +49,8 @@ export class UploadService {
                 'error',
                 null,
                 null,
+                null,
+                null,
                 error
               ));
             },
@@ -53,7 +59,9 @@ export class UploadService {
               const uploadResult = new UploadResult(
                 'success',
                 mainImageUrl,
-                uploadTask.snapshot.downloadURL
+                mainImagePath,
+                uploadTask.snapshot.downloadURL,
+                uploadTask.snapshot.metadata.fullPath
               );
 
               // this.saveFileData(upload);
@@ -65,5 +73,10 @@ export class UploadService {
     });
 
     return promise;
+  }
+
+  deleteFromPath(path: string) {
+    const storageRef = firebase.storage().ref();
+    return storageRef.child(path).delete();
   }
 }

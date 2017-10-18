@@ -13,7 +13,7 @@ export class ChickenAddComponent implements OnInit {
   chickenForm: FormGroup;
   location: Location;
   imageData: ImageProcessingResult;
-  loading = false;
+  loadingMessage = null;
 
   formErrors = {
     'name': ''
@@ -58,7 +58,7 @@ export class ChickenAddComponent implements OnInit {
       if (user && this.chickenForm.valid) {
         // Save resized images to storage
         if (this.imageData && this.imageData.result === 'success') {
-          this.loading = true;
+          this.loadingMessage = 'Uploading image...';
           console.log('uploading images');
           // User selcted an image
           this.uploadService.pushUpload(this.imageData.imageSet, user['$key'], user.currentFlockId).then(uploadResult => {
@@ -78,14 +78,14 @@ export class ChickenAddComponent implements OnInit {
 
   onImageChange(event) {
     this.imageData = null;
-    this.loading = true;
+    this.loadingMessage = 'Resizing your image...';
     if (event.target.files[0]) {
       this.imageService.processImage(event.target.files[0]).then(data => {
         this.imageData = data;
-        this.loading = false;
+        this.loadingMessage = false;
       }).catch(err => {
         console.log(err);
-        this.loading = false;
+        this.loadingMessage = null;
       });
     }
   }
@@ -123,12 +123,12 @@ export class ChickenAddComponent implements OnInit {
 
     this.chickenService.addChicken(user.currentFlockId, chicken)
       .then(data => {
-        this.loading = false;
+        this.loadingMessage = null;
         this.router.navigateByUrl('/flock');
       })
       .catch(error => {
         console.log(error);
-        this.loading = false;
+        this.loadingMessage = null;
       });
   }
 }

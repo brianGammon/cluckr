@@ -32,10 +32,10 @@
   <!-- <input type="text" id="photo" class="input" formControlName="photo"> -->
   <div class="level">
     <div class="level-left">
-        <div *ngIf="!loading" class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (imageData ? imageData.preview : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
+        <div *ngIf="!loadingMessage" class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (imageData ? imageData.preview : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
     </div>
   </div>
-  <loading-spinner *ngIf="loading"></loading-spinner>
+  <loading-spinner *ngIf="loadingMessage" [message]="loadingMessage"></loading-spinner>
 
 
   <div class="level is-mobile">

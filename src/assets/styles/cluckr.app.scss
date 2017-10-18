@@ -1,0 +1,80 @@
+// Colors
+
+$white:  #fff !default;
+$black:  #000 !default;
+$red:    #d9534f !default;
+$orange: #f0ad4e !default;
+$yellow: #ffd500 !default;
+$green:  #5cb85c !default;
+$blue:   #0275d8 !default;
+$teal:   #5bc0de !default;
+$pink:   #ff5b77 !default;
+$purple: #613d7c !default;
+
+// Grayscale
+$gray-dark:                 #222;
+$gray:                      #212121;
+$gray-light:                #666;
+$gray-lighter:              #bbb;
+$gray-lightest:             #eee;
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+///// Content
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.loading {
+  opacity: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #272c33;
+  padding-top: 25vh;
+  text-align: center;
+  z-index: -1;
+  transition: opacity .8s ease-out;
+}
+
+app-root:empty + .loading {
+  opacity: 1;
+  z-index: 100;
+  h1 {
+    font-family: "courier", monospace;
+    color: #EEE;
+    margin-bottom: 50px;
+  }
+}
+
+.input {
+  margin-bottom: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .cal-header {
+    font-size: xx-small;
+  }
+}
+
+.cal-day-badge {
+  display: none !important;
+}
+
+.cal-month-view .cal-day-cell.cal-today .cal-day-number {
+  font-size: 1.2em !important;
+}
+
+.profile-image {
+  background-size:cover;
+  background-repeat: no-repeat;
+  width: 128px;
+  height: 128px;
+}
+
+.profile-image-sm {
+  background-size:cover;
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 64px;
+}

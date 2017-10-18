@@ -8,7 +8,7 @@ module.exports = {
     root: 'dist/',
     plugins: [
         new SWPrecacheWebpackPlugin({
-          cacheId: 'firestarter',
+          cacheId: 'cluckr',
           filename: 'service-worker.js',
           staticFileGlobs: [
             'dist/index.html',
@@ -16,8 +16,7 @@ module.exports = {
             'dist/**.css'
           ],
           stripPrefix: 'dist/assets/', // stripPrefixMulti is also supported
-          mergeStaticsConfig: true        
+          mergeStaticsConfig: true
         })
       ]
   };
-  

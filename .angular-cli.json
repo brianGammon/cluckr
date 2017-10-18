@@ -21,7 +21,7 @@
       "prefix": "",
       "styles": [
         "../node_modules/angular-calendar/dist/css/angular-calendar.css",
-        "styles.scss"
+        "../src/assets/styles/cluckr.app.scss"
       ],
       "scripts": [
         "../node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"

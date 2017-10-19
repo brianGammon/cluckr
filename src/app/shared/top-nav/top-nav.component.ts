@@ -48,6 +48,10 @@ export class TopNavComponent implements OnInit {
             this.flocks = result;
             this.currentFlock = result.find(flock => flock.$key === user.currentFlockId);
           });
+      } else {
+        this.user = null;
+        this.currentFlock = null;
+        this.flocks = null;
       }
     });
   }

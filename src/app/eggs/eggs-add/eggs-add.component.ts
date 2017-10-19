@@ -101,7 +101,7 @@ export class EggsAddComponent implements OnInit {
         egg.modified = moment().utc().toISOString();
         this.eggService.saveEgg(this.flockId, egg)
           .then(data => {
-            this.router.navigateByUrl('/eggs/day/' + this.eggForm.value['dateLaid']);
+            this.location.back();
           })
           .catch(error => console.log(error));
       });

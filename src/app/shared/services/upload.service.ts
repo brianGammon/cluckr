@@ -77,6 +77,13 @@ export class UploadService {
 
   deleteFromPath(path: string) {
     const storageRef = firebase.storage().ref();
-    return storageRef.child(path).delete();
+    return storageRef.child(path).delete().catch((error: any) => {
+      if (error.code && error.code === 'storage/object-not-found') {
+        // Swallow the error if image already deleted
+        return new Promise(resolve => resolve({success: true}));
+      } else {
+        throw(error);
+      }
+    });
   }
 }

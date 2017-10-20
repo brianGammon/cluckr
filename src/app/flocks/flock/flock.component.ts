@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Flock, Chicken, FlockStats, Egg } from '../../shared/models';
 
 @Component({
@@ -14,6 +15,7 @@ export class FlockComponent implements OnInit {
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
   stats: FlockStats = null;
+  eggSubscription: Subscription;
   private flockId: string;
 
   constructor(
@@ -27,6 +29,10 @@ export class FlockComponent implements OnInit {
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
+      if (this.eggSubscription) {
+        this.eggSubscription.unsubscribe();
+      }
+
       if (user) {
         if (!user.currentFlockId) {
           return this.router.navigateByUrl('/flocks');
@@ -34,7 +40,7 @@ export class FlockComponent implements OnInit {
         this.flockId = user.currentFlockId;
         this.flock = this.flockService.getFlock(user.currentFlockId);
         this.chickens = this.chickenService.getChickensList(user.currentFlockId);
-        this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
+        this.eggSubscription = this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
           this.stats = null;
           if (eggs.length > 0) {
             this.stats = this.buildStats(eggs);

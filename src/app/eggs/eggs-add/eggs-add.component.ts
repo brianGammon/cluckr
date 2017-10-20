@@ -128,9 +128,4 @@ export class EggsAddComponent implements OnInit {
       }
     }
   }
-
-  // getKeys(flock: string) {
-  //   return Object.keys(eggs);
-  // }
-
 }

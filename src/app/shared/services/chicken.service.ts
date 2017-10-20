@@ -44,13 +44,12 @@ export class ChickenService {
       })
      .then(() => {
        if (chicken.thumbnailPath) {
-        this.uploadService.deleteFromPath(chicken.thumbnailPath);
+        return this.uploadService.deleteFromPath(chicken.thumbnailPath);
        } else {
         return new Promise(resolve => resolve({success: true}));
        }
       })
-     .then(() => this.db.object(`chickens/${flockId}/${chicken['$key']}`).remove())
-     .catch(error => console.log(error));
+     .then(() => this.db.object(`chickens/${flockId}/${chicken['$key']}`).remove());
   }
 
   deleteChickensByFlockId(flockId: string) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { UserService, FlockService } from '../../shared/services';
+import { Subscription } from 'rxjs/Subscription';
 import { User, Flock } from '../models';
 import * as moment from 'moment';
 
@@ -31,8 +32,7 @@ export class TopNavComponent implements OnInit {
   currentFlock: Flock;
   dayString: string = moment().format('DD');
   monthString: string = moment().format('YYYY-MM');
-
-  // collapse:string = "closed";
+  flocksSubscription: Subscription;
   show = false;
 
   constructor(
@@ -42,12 +42,16 @@ export class TopNavComponent implements OnInit {
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
+      if (this.flocksSubscription) {
+        this.flocksSubscription.unsubscribe();
+      }
+
       if (user) {
-          this.user = user;
-          this.flockService.getFlocks(user['$key']).subscribe(result => {
-            this.flocks = result;
-            this.currentFlock = result.find(flock => flock.$key === user.currentFlockId);
-          });
+        this.user = user;
+        this.flocksSubscription = this.flockService.getFlocks(user['$key']).subscribe(result => {
+          this.flocks = result;
+          this.currentFlock = result.find(flock => flock.$key === user.currentFlockId);
+        });
       } else {
         this.user = null;
         this.currentFlock = null;
@@ -58,8 +62,6 @@ export class TopNavComponent implements OnInit {
 
   toggleCollapse() {
     this.show = !this.show;
-    // this.collapse = this.collapse == "open" ? 'closed' : 'open';
-
   }
 
   signOut() {

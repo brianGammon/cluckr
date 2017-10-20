@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Egg, Chicken } from '../../shared/models';
 import { CalendarEvent } from 'angular-calendar';
 
@@ -12,7 +13,7 @@ import { CalendarEvent } from 'angular-calendar';
 })
 export class EggsMonthlyComponent implements OnInit {
   eggs: Observable<Egg[]> = null;
-  // chickens: Observable<Chicken[]> = null;
+  eggsSubscription: Subscription;
   dateString: string;
   previousMonth: string;
   nextMonth: string;
@@ -44,6 +45,10 @@ export class EggsMonthlyComponent implements OnInit {
 
   ngOnInit() {
     this.userService.currentUser.subscribe(user => {
+      if (this.eggsSubscription) {
+        this.eggsSubscription.unsubscribe();
+      }
+
       if (user) {
         this.flockId = user.currentFlockId;
 
@@ -58,7 +63,7 @@ export class EggsMonthlyComponent implements OnInit {
           const endOfMonth   = selectedDate.endOf('month').format('YYYY-MM-DD');
           console.log(`Start: ${startOfMonth}, End: ${endOfMonth}`);
 
-          this.eggService.getEggsByDateRange(this.flockId, startOfMonth, endOfMonth).subscribe((eggs: Egg[]) => {
+          this.eggsSubscription = this.eggService.getEggsByDateRange(this.flockId, startOfMonth, endOfMonth).subscribe((eggs: Egg[]) => {
             const eggEvents = [];
             eggs.forEach(egg => {
               const title = egg.chickenName + ' ' + (egg.weight ? `${egg.weight}g` : 'egg');

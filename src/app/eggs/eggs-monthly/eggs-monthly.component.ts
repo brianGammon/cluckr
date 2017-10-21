@@ -49,7 +49,7 @@ export class EggsMonthlyComponent implements OnInit {
         this.eggsSubscription.unsubscribe();
       }
 
-      if (user) {
+      if (user && user.currentFlockId) {
         this.flockId = user.currentFlockId;
 
         this.route.params.subscribe(params => {

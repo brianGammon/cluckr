@@ -26,7 +26,7 @@ export class FlocksComponent implements OnInit {
     this.userService.currentUser.subscribe(user => {
       if (user) {
         this.user = user;
-        this.flocks = this.flockService.getFlocks(user['$key']);
+        this.flocks = this.flockService.getFlocks(user);
       }
     });
   }
@@ -36,7 +36,7 @@ export class FlocksComponent implements OnInit {
       this.flockService.addFlock(this.newFlockName, this.user['$key'])
         .then(data => {
           this.newFlockName = '';
-          return this.userService.setCurrentFlockId(data.key);
+          return this.userService.linkFlock(data.key);
         })
         .then(() => {
           this.router.navigateByUrl('/flock');
@@ -55,7 +55,7 @@ export class FlocksComponent implements OnInit {
         .then(data => {
           console.log(data);
 
-          return this.userService.setCurrentFlockId(this.joinFlockId);
+          return this.userService.linkFlock(this.joinFlockId);
         })
         .then(() => {
           this.router.navigateByUrl('/flock');
@@ -74,7 +74,9 @@ export class FlocksComponent implements OnInit {
       if (this.user.currentFlockId === flockId) {
         this.userService.setCurrentFlockId(null);
       }
+
       this.flockService.deleteFlock(this.user['$key'], flockId)
+        .then(() => this.userService.unlinkFlock(flockId))
         .catch(err => console.log(err));
     }
   }

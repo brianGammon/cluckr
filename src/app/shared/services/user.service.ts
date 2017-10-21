@@ -30,8 +30,16 @@ export class UserService {
   }
 
   setCurrentFlockId(flockId: string) {
-    const ref = this.db.object(`users/${this.uid}`);
-    return ref.update({ currentFlockId: flockId});
+    return this.db.object(`users/${this.uid}/currentFlockId`).set(flockId);
+  }
+
+  linkFlock(flockId: string) {
+    return this.db.object(`users/${this.uid}/flocks/${flockId}`).set(true)
+      .then(() => this.setCurrentFlockId(flockId));
+  }
+
+  unlinkFlock(flockId: string) {
+    return this.db.object(`users/${this.uid}/flocks/${flockId}`).remove();
   }
 
   signUp(email: string, password: string) {

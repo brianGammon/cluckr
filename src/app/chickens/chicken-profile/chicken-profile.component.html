@@ -75,7 +75,7 @@
           <p class="subtitle is-6">Total</p>
         </div>
       </div>
-      <div class="level-item has-text-centered">
+      <div *ngIf="heaviest" class="level-item has-text-centered">
         <div>
           <p class="heading">Heaviest</p>
           <p class="title is-4">{{ heaviest?.weight }}g</p>

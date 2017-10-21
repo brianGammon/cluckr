@@ -1,6 +1,5 @@
 export class Egg {
   $key: string;
-  name: string;
   date: string;
   weight: number;
   notes: string;

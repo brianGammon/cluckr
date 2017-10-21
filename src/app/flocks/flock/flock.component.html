@@ -45,14 +45,14 @@
               <p class="subtitle is-6">Eggs</p>
             </div>
           </div>
-          <div class="level-item has-text-centered">
+          <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
             <div>
               <p class="heading">Heaviest</p>
               <p class="title is-4">{{ stats?.heaviest.weight }}g</p>
               <p class="subtitle is-6">{{ stats?.heaviest.chickenName }}</p>
             </div>
           </div>
-          <div class="level-item has-text-centered">
+          <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
             <div>
               <p class="heading">Avg Weight</p>
               <p class="title is-4">{{ stats?.averageWeight | number:'1.1-1' }}</p>
@@ -109,7 +109,7 @@
                 <i class="fa fa-trophy" aria-hidden="true"></i>
               </span> Top Producer
             </p>
-            <p *ngIf="stats?.heaviest.chickenId === chicken.$key">
+            <p *ngIf="stats?.heaviest && stats?.heaviest.chickenId === chicken.$key">
               <span class="icon">
                 <i class="fa fa-trophy" aria-hidden="true"></i>
               </span> Heaviest Egg

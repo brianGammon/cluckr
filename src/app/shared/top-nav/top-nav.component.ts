@@ -48,7 +48,7 @@ export class TopNavComponent implements OnInit {
 
       if (user) {
         this.user = user;
-        this.flocksSubscription = this.flockService.getFlocks(user['$key']).subscribe(result => {
+        this.flocksSubscription = this.flockService.getFlocks(user).subscribe(result => {
           this.flocks = result;
           this.currentFlock = result.find(flock => flock.$key === user.currentFlockId);
         });

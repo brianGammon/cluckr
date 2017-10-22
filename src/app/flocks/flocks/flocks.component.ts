@@ -51,12 +51,7 @@ export class FlocksComponent implements OnInit {
 
   joinFlock() {
     if (this.joinFlockId) {
-      this.flockService.joinFlock(this.joinFlockId, this.user['$key'])
-        .then(data => {
-          console.log(data);
-
-          return this.userService.linkFlock(this.joinFlockId);
-        })
+      this.userService.linkFlock(this.joinFlockId)
         .then(() => {
           this.router.navigateByUrl('/flock');
         })

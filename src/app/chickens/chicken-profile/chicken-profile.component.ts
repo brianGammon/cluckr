@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Egg, Chicken } from '../../shared/models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -16,6 +17,7 @@ export class ChickenProfileComponent implements OnInit {
   longestStreak: number;
   total: number;
   flockId: string;
+  private eggSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,11 +29,15 @@ export class ChickenProfileComponent implements OnInit {
       const chickenId = params['chickenId'];
 
       this.userService.currentUser.subscribe(user => {
+        if (this.eggSubscription) {
+          this.eggSubscription.unsubscribe();
+        }
+
         if (user) {
           this.flockId = user.currentFlockId;
           this.chicken = this.chickenService.getChicken(this.flockId, chickenId)
             .map(chicken => {
-              this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(eggs => {
+              this.eggSubscription = this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(eggs => {
                 this.total = eggs.length;
                 if (this.total > 0) {
                   const stats = this.buildStats(eggs);

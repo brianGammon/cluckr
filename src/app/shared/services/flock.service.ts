@@ -41,13 +41,6 @@ export class FlockService {
     return ref.push(flock);
   }
 
-  joinFlock(flockId: string, userId: string) {
-    const ref = this.db.object(`flocks/${flockId}/users`);
-    const newObj = {};
-    newObj[userId] = true;
-    return ref.update(newObj);
-  }
-
   deleteFlock(userId: string, flockId: string) {
     return this.eggService.deleteEggsByFlockId(flockId)
       .then(() => this.chickenService.deleteChickensByFlockId(flockId))

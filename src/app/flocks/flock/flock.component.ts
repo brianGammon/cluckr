@@ -16,7 +16,8 @@ export class FlockComponent implements OnInit {
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
   stats: FlockStats = null;
-  eggSubscription: Subscription;
+
+  private eggSubscription: Subscription;
   private flockId: string;
 
   constructor(

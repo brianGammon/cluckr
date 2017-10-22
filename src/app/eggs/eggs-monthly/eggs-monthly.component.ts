@@ -13,13 +13,13 @@ import { CalendarEvent } from 'angular-calendar';
 })
 export class EggsMonthlyComponent implements OnInit {
   eggs: Observable<Egg[]> = null;
-  eggsSubscription: Subscription;
   dateString: string;
   previousMonth: string;
   nextMonth: string;
   events: Observable<CalendarEvent[]>;
   viewDate = new Date(Date.now());
 
+  private eggsSubscription: Subscription;
   private flockId: string;
   private colors: any = {
     red: {

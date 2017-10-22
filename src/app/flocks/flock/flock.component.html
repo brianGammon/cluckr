@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="level-right">
-          <div class="level-item has-text-centered">
+          <div *ngIf="flock.ownedBy === user['$key']" class="level-item has-text-centered">
             <a class="button is-small is-outlined" routerLink="/chicken-add">
               <span class="icon">
                 <i class="fa fa-plus" aria-hidden="true"></i>
@@ -117,7 +117,7 @@
           </div>
         </div>
         <div class="media-right">
-          <button class="delete is-medium" (click)="deleteChicken(chicken)"></button>
+          <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
         </div>
       </div>
     </div>

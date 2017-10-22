@@ -61,9 +61,13 @@ export class ChickenAddComponent implements OnInit {
           this.loadingMessage = 'Uploading image...';
           console.log('uploading images');
           // User selcted an image
-          this.uploadService.pushUpload(this.imageData.imageSet, user['$key'], user.currentFlockId).then(uploadResult => {
-            this.saveChicken(user, uploadResult);
-          });
+          this.uploadService.pushUpload(this.imageData.imageSet, user['$key'], user.currentFlockId)
+            .then(uploadResult => this.saveChicken(user, uploadResult))
+            .catch(err => {
+              this.loadingMessage = null;
+              this.imageData = null;
+              console.log(err);
+            });
         } else {
           // No photo added
           this.saveChicken(user);

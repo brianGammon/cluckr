@@ -5,13 +5,14 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Flock, Chicken, FlockStats, Egg } from '../../shared/models';
+import { Flock, Chicken, FlockStats, Egg, User } from '../../shared/models';
 
 @Component({
   templateUrl: './flock.component.html',
   styleUrls: ['./flock.component.scss']
 })
 export class FlockComponent implements OnInit {
+  user: User;
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
   stats: FlockStats = null;
@@ -32,6 +33,8 @@ export class FlockComponent implements OnInit {
       if (this.eggSubscription) {
         this.eggSubscription.unsubscribe();
       }
+
+      this.user = user;
 
       if (user) {
         if (!user.currentFlockId) {

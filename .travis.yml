@@ -14,10 +14,13 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-  - ng lint && ng build
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then ng lint && ng build; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "Build Prod"; fi
 
 after_success:
-  - firebase deploy --project cluckrdev --token $FIREBASE_TOKEN
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then firebase deploy --project cluckrdev --token $FIREBASE_TOKEN; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "Deploy Prod"; fi
+
 
 notifications:
   email:

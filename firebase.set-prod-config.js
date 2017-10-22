@@ -1,4 +1,5 @@
 const fs = require('fs');
+const prodEnvFile = './src/environments/environment.prod.ts';
 const apiKey = process.env.PROD_FB_API_KEY;
 const projectName = process.env.PROD_PROJ_NAME;
 
@@ -8,7 +9,7 @@ if (!apiKey || !projectName) {
   throw new Error(message);
 }
 
-fs.readFile('./src/environments/environment.prod.ts', 'utf8', function (err,data) {
+fs.readFile(prodEnvFile, 'utf8', function (err,data) {
   if (err) {
     console.log(err);
     throw new Error(err);
@@ -16,7 +17,7 @@ fs.readFile('./src/environments/environment.prod.ts', 'utf8', function (err,data
   const result = data.replace(/PROD_FB_API_KEY/g, apiKey)
     .replace(/PROD_PROJ_NAME/g, projectName);
 
-  fs.writeFile('./src/environments/environment.prod.1.ts', result, 'utf8', function (err) {
+  fs.writeFile(prodEnvFile, result, 'utf8', function (err) {
      if (err) {
       console.log(err);
       throw new Error(err);

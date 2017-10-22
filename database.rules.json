@@ -31,7 +31,7 @@
       ".write": false,
       "$flockId": {
         ".read": "root.child('users').child(auth.uid).child('flocks').child($flockId).val() == true",
-        ".write": "root.child('users').child(auth.uid).child('flocks').child($flockId).val() == true",
+        ".write": "root.child('flocks').child($flockId).child('ownedBy').val() == auth.uid",
         "$chickenId": {
           ".validate": "newData.hasChildren(['name'])"
         }

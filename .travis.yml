@@ -15,11 +15,11 @@ before_script:
 
 script:
   - if [ "$TRAVIS_BRANCH" = "dev" ]; then ng lint && ng build; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "Build Prod"; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run pwa; fi
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "dev" ]; then firebase deploy --project cluckrdev --token $FIREBASE_TOKEN; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "Deploy Prod"; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then firebase deploy --project $PROD_PROJ_NAME --token $FIREBASE_TOKEN; fi
 
 
 notifications:

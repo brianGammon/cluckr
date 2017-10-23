@@ -16,6 +16,7 @@ export class EggsAddComponent implements OnInit {
   chickens: Observable<Chicken[]> = null;
   eggForm: FormGroup;
   location: Location;
+  errorMessage: string = null;
   private userId: string;
 
   formErrors = {
@@ -86,6 +87,7 @@ export class EggsAddComponent implements OnInit {
 
   addEgg() {
     if (this.eggForm.valid) {
+      this.errorMessage = null;
       this.chickens.subscribe(chickens => {
         const id = this.eggForm.value['chickenId'];
         const chick = chickens.find(chicken => chicken['$key'] === id);
@@ -103,7 +105,10 @@ export class EggsAddComponent implements OnInit {
           .then(data => {
             this.location.back();
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            this.errorMessage = 'Oops, something went wrong 😩';
+            console.log(error);
+          });
       });
     }
   }

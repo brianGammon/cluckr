@@ -1,3 +1,7 @@
+<div *ngIf="errorMessage" class="notification is-danger">
+  {{ errorMessage }}
+</div>
+
 <form *ngIf="chickens | async; let chickens; else loading" [formGroup]="eggForm" (ngSubmit)="addEgg()">
 
   <div class="level is-mobile">

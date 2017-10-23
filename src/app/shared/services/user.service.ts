@@ -38,8 +38,17 @@ export class UserService {
       .then(() => this.setCurrentFlockId(flockId));
   }
 
-  unlinkFlock(flockId: string) {
-    return this.db.object(`users/${this.uid}/flocks/${flockId}`).remove();
+  getFlockMembers(flockId: string) {
+    return this.db.list('users', {
+      query: {
+        orderByChild: `flocks/${flockId}`,
+        equalTo: true
+      }
+    });
+  }
+
+  unlinkFlock(flockId: string, userId: string) {
+    return this.db.object(`users/${userId}/flocks/${flockId}`).remove();
   }
 
   signUp(email: string, password: string) {

@@ -70,9 +70,24 @@ export class FlocksComponent implements OnInit {
         this.userService.setCurrentFlockId(null);
       }
 
-      this.flockService.deleteFlock(this.user['$key'], flockId)
-        .then(() => this.userService.unlinkFlock(flockId))
-        .catch(err => console.log(err));
+      this.userService.getFlockMembers(flockId).take(1).subscribe(users => {
+        const unlinkUsers = [];
+
+        users.forEach(user => {
+          console.log(user['$key']);
+          unlinkUsers.push(this.userService.unlinkFlock(flockId, user['$key']));
+        });
+
+        Promise.all(unlinkUsers)
+          .then(() => {
+            console.log('Promise.all Done, deleting flock');
+            return this.flockService.deleteFlock(this.user['$key'], flockId);
+          })
+          .catch(err => {
+            console.log(err);
+            throw new Error(err);
+          });
+      });
     }
   }
 }

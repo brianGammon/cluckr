@@ -29,6 +29,7 @@
       <div class="select">
         <select id="chickenId" formControlName="chickenId" required>
           <option value="">Select a chicken</option>
+          <option value="unknown">I'm not sure</option>
           <option *ngFor="let chicken of chickens" value="{{ chicken.$key }}">{{ chicken.name}}</option>
         </select>
       </div>
@@ -71,9 +72,6 @@
     <div class="control">
       <textarea class="textarea" id="notes" placeholder="e.g. Anything interesting about this egg" formControlName="notes"></textarea>
     </div>
-    <!-- <p *ngIf="formErrors.notes" class="help is-danger">
-      {{ formErrors.notes }}
-    </p> -->
   </div>
 
   <button type="submit" class="button is-primary" [disabled]="!eggForm.valid">Submit</button>

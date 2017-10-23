@@ -11,7 +11,6 @@ import { Egg, Chicken } from '../../shared/models';
 })
 export class EggsDailyComponent implements OnInit {
   eggs: Observable<Egg[]> = null;
-  chickens: Observable<Chicken[]> = null;
   dateString: string;
   previousDate: string;
   nextDate: string;
@@ -33,7 +32,6 @@ export class EggsDailyComponent implements OnInit {
           this.setNavDates(params['date']);
           this.dateString = params['date'];
           this.eggs = this.eggService.getEggsByDate(this.flockId, this.dateString);
-          this.chickens = this.chickenService.getChickens(this.flockId);
         });
       }
     });

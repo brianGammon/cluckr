@@ -56,13 +56,15 @@ export class EggService {
   deleteEggsByChickenId(flockId: string, chickenId: string) {
     const promise = new Promise<boolean>((resolve, reject) => {
       const eggsRef = this.eggsByChickenId(flockId, chickenId);
-      eggsRef.subscribe(eggs => {
+      eggsRef.take(1).subscribe(eggs => {
         eggs.forEach(egg => {
           this.db.object(`/eggs/${flockId}/${egg['$key']}`).remove();
         });
         resolve(true);
       }, error => {
         console.log('error deleting eggs');
+        console.log(error);
+
         reject(error);
       });
     });

@@ -88,14 +88,14 @@ export class EggsAddComponent implements OnInit {
   addEgg() {
     if (this.eggForm.valid) {
       this.errorMessage = null;
-      this.chickens.subscribe(chickens => {
+      this.chickens.take(1).subscribe(chickens => {
         const id = this.eggForm.value['chickenId'];
         const chick = chickens.find(chicken => chicken['$key'] === id);
 
         const egg = new Egg();
         egg.date = this.eggForm.value['dateLaid'];
         egg.chickenId = id;
-        egg.chickenName = chick ? chick.name : id;
+        egg.chickenName = chick ? chick.name : 'Unknown';
         egg.weight = this.eggForm.value['weight'];
         egg.damaged = !!this.eggForm.value['damaged'];
         egg.notes = this.eggForm.value['notes'];

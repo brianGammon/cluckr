@@ -1,5 +1,4 @@
 <div *ngIf="eggs | async; let eggs">
-  <div *ngIf="chickens | async; let chickens">
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
@@ -68,7 +67,8 @@
           <div class="content">
             <div class="columns is-mobile">
               <div class="column is-two-thirds">
-                <a [routerLink]="['/chicken', egg.chickenId]">{{ chickens[egg.chickenId].name }}</a>
+                <a *ngIf="egg.chickenId !== 'unknown'" [routerLink]="['/chicken', egg.chickenId]">{{ egg.chickenName }}</a>
+                <p *ngIf="egg.chickenId === 'unknown'">{{ egg.chickenName }}</p>
               </div>
               <div *ngIf="egg.weight" class="column">
                 <span>
@@ -99,5 +99,4 @@
         </div>
       </div>
     </div>
-  </div>
 </div>

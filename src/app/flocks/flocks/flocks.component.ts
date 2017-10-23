@@ -74,15 +74,11 @@ export class FlocksComponent implements OnInit {
         const unlinkUsers = [];
 
         users.forEach(user => {
-          console.log(user['$key']);
           unlinkUsers.push(this.userService.unlinkFlock(flockId, user['$key']));
         });
 
         Promise.all(unlinkUsers)
-          .then(() => {
-            console.log('Promise.all Done, deleting flock');
-            return this.flockService.deleteFlock(this.user['$key'], flockId);
-          })
+          .then(() => this.flockService.deleteFlock(this.user['$key'], flockId))
           .catch(err => {
             console.log(err);
             throw new Error(err);

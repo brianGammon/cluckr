@@ -10,7 +10,8 @@
         ".read": "auth.uid == $uid",
         ".write": "auth.uid == $uid",
         "currentFlockId": {
-          ".validate": "!newData.exists() || newData.parent().child('flocks').child(newData.val()).val() == true"
+          ".validate": "!newData.exists() || newData.parent().child('flocks').child(newData.val()).val() == true",
+          ".write": "!newData.exists() && auth != null"
         },
         "flocks": {
           "$flockId": {

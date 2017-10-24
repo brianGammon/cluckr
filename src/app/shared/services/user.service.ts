@@ -48,7 +48,8 @@ export class UserService {
   }
 
   unlinkFlock(flockId: string, userId: string) {
-    return this.db.object(`users/${userId}/flocks/${flockId}`).remove();
+    return this.db.object(`users/${userId}/flocks/${flockId}`).remove()
+      .then(() => this.db.object(`users/${userId}/currentFlockId`).remove());
   }
 
   signUp(email: string, password: string) {

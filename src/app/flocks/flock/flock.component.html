@@ -1,6 +1,6 @@
 <div *ngIf="flock | async; let flock; else loading">
   <div *ngIf="!flock.name" class="notification is-danger">
-    Flock not found
+    Your last used flock is no longer available. Please visit <a routerLink="/flocks">Manage Flocks</a> to select a different one.
   </div>
 
   <div *ngIf="flock.name">

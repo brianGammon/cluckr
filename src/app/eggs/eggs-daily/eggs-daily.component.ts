@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import { Egg, Chicken } from '../../shared/models';
 
 @Component({
   templateUrl: './eggs-daily.component.html',
   styleUrls: ['./eggs-daily.component.scss']
 })
-export class EggsDailyComponent implements OnInit {
+export class EggsDailyComponent implements OnInit, OnDestroy {
   eggs: Observable<Egg[]> = null;
   dateString: string;
   previousDate: string;
   nextDate: string;
   private flockId: string;
+  private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -24,7 +27,7 @@ export class EggsDailyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userService.currentUser.subscribe(user => {
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
       if (user) {
         this.flockId = user.currentFlockId;
 
@@ -35,6 +38,12 @@ export class EggsDailyComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    // clean up subscriptions
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 
   deleteEgg(key) {

@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService, FlockService, ChickenService, EggService } from '../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import { Flock, Chicken, FlockStats, Egg, User } from '../../shared/models';
 
 @Component({
   templateUrl: './flock.component.html',
   styleUrls: ['./flock.component.scss']
 })
-export class FlockComponent implements OnInit {
+export class FlockComponent implements OnInit, OnDestroy {
   user: User;
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
   stats: FlockStats = null;
 
-  private eggSubscription: Subscription;
+  private unsubscriber: Subject<void> = new Subject<void>();
   private flockId: string;
 
   constructor(
@@ -30,11 +31,7 @@ export class FlockComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userService.currentUser.subscribe(user => {
-      if (this.eggSubscription) {
-        this.eggSubscription.unsubscribe();
-      }
-
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
       this.user = user;
 
       if (user) {
@@ -44,7 +41,7 @@ export class FlockComponent implements OnInit {
         this.flockId = user.currentFlockId;
         this.flock = this.flockService.getFlock(user.currentFlockId);
         this.chickens = this.chickenService.getChickensList(user.currentFlockId);
-        this.eggSubscription = this.eggService.getEggs(user.currentFlockId).subscribe(eggs => {
+        this.eggService.getEggs(user.currentFlockId).takeUntil(this.unsubscriber).subscribe(eggs => {
           this.stats = null;
           if (eggs.length > 0) {
             this.stats = this.buildStats(eggs);
@@ -52,6 +49,12 @@ export class FlockComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    // clean up subscriptions
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 
   deleteChicken(chicken: Chicken) {

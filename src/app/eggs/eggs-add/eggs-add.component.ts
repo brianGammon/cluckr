@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Chicken, Egg } from '../../shared/models';
 
@@ -11,13 +13,14 @@ import { Chicken, Egg } from '../../shared/models';
   templateUrl: './eggs-add.component.html',
   styleUrls: ['./eggs-add.component.scss']
 })
-export class EggsAddComponent implements OnInit {
+export class EggsAddComponent implements OnInit, OnDestroy {
   flockId: string;
   chickens: Observable<Chicken[]> = null;
   eggForm: FormGroup;
   location: Location;
   errorMessage: string = null;
   private userId: string;
+  private unsubscriber: Subject<void> = new Subject<void>();
 
   formErrors = {
     'dateLaid': '',
@@ -55,7 +58,7 @@ export class EggsAddComponent implements OnInit {
     const defaultDate = this.route.snapshot.queryParamMap.get('date') || moment().format('YYYY-MM-DD');
     const defaultChickenId = this.route.snapshot.queryParamMap.get('chickenId');
 
-    this.userService.currentUser.subscribe(user => {
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
       if (user) {
         this.userId = user['$key'];
         this.flockId = user.currentFlockId;
@@ -82,7 +85,12 @@ export class EggsAddComponent implements OnInit {
 
     this.eggForm.valueChanges.subscribe(data => this.onValueChanged(data));
     this.onValueChanged(); // reset validation messages
+  }
 
+  ngOnDestroy() {
+    // clean up subscriptions
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 
   addEgg() {

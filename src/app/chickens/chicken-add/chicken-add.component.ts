@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService, ChickenService, ImageService, UploadService } from '../../shared/services';
@@ -9,7 +9,7 @@ import { User, Chicken, ImageProcessingResult, UploadResult } from '../../shared
   templateUrl: './chicken-add.component.html',
   styleUrls: ['./chicken-add.component.scss']
 })
-export class ChickenAddComponent implements OnInit {
+export class ChickenAddComponent implements OnInit, AfterViewInit {
   chickenForm: FormGroup;
   location: Location;
   imageData: ImageProcessingResult;
@@ -25,6 +25,8 @@ export class ChickenAddComponent implements OnInit {
       'required': 'Chicken name is required.'
     }
   };
+
+  @ViewChildren('setFocus') vc;
 
   constructor(
     private router: Router,
@@ -51,7 +53,10 @@ export class ChickenAddComponent implements OnInit {
 
     this.chickenForm.valueChanges.subscribe(data => this.onValueChanged(data));
     this.onValueChanged(); // reset validation messages
+  }
 
+  ngAfterViewInit() {
+    this.vc.first.nativeElement.focus();
   }
 
   addChicken() {

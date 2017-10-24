@@ -1,75 +1,73 @@
 <div *ngIf="flock | async; let flock; else loading">
   <div *ngIf="!flock.name" class="notification is-danger">
-    Flock not found
+    Your last used flock is no longer available. Please visit <a routerLink="/flocks">Manage Flocks</a> to select a different one.
   </div>
 
   <div *ngIf="flock.name">
     <div *ngIf="chickens | async; let chickens; else loading" class="content chicken-list">
-      <div *ngIf="chickens.length > 0">
-        <div class="level is-mobile">
-          <div class="level-left">
-            <div class="level-item">
-              <p class="title is-6">Manage Flock</p>
-            </div>
-          </div>
-        </div>
-        <div class="level is-mobile">
-          <div class="level-left">
-            <div class="level-item">
-              <p class="heading">Stats</p>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item has-text-centered">
-              <a class="button is-small is-primary" routerLink="/add">
-                <span class="icon">
-                  <i class="fa fa-plus" aria-hidden="true"></i>
-                </span>
-                <span>Egg</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="!stats" class="level is-mobile">
+      <div class="level is-mobile">
+        <div class="level-left">
           <div class="level-item">
-            <em>No Eggs Logged Yet</em>
+            <p class="title is-6">Manage Flock</p>
           </div>
         </div>
-
-        <div *ngIf="stats" class="level is-mobile">
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Total</p>
-              <p class="title is-4">{{ stats?.total }}</p>
-              <p class="subtitle is-6">Eggs</p>
-            </div>
-          </div>
-          <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
-            <div>
-              <p class="heading">Heaviest</p>
-              <p class="title is-4">{{ stats?.heaviest.weight }}g</p>
-              <p class="subtitle is-6">{{ stats?.heaviest.chickenName }}</p>
-            </div>
-          </div>
-          <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
-            <div>
-              <p class="heading">Avg Weight</p>
-              <p class="title is-4">{{ stats?.averageWeight | number:'1.1-1' }}</p>
-              <p class="subtitle is-6">Grams</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Avg</p>
-              <p class="title is-4">{{ stats?.averageNumber | number:'1.1-1' }}</p>
-              <p class="subtitle is-6">Per Day</p>
-            </div>
-          </div>
-        </div>
-
-        <hr>
       </div>
+      <div class="level is-mobile">
+        <div class="level-left">
+          <div class="level-item">
+            <p class="heading">Stats</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item has-text-centered">
+            <a class="button is-small is-primary" routerLink="/add">
+              <span class="icon">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </span>
+              <span>Egg</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!stats" class="level is-mobile">
+        <div class="level-item">
+          <em>No Eggs Logged Yet</em>
+        </div>
+      </div>
+
+      <div *ngIf="stats" class="level is-mobile">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Total</p>
+            <p class="title is-4">{{ stats?.total }}</p>
+            <p class="subtitle is-6">Eggs</p>
+          </div>
+        </div>
+        <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
+          <div>
+            <p class="heading">Heaviest</p>
+            <p class="title is-4">{{ stats?.heaviest.weight }}g</p>
+            <p class="subtitle is-6">{{ stats?.heaviest.chickenName }}</p>
+          </div>
+        </div>
+        <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
+          <div>
+            <p class="heading">Avg Weight</p>
+            <p class="title is-4">{{ stats?.averageWeight | number:'1.1-1' }}</p>
+            <p class="subtitle is-6">Grams</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Avg</p>
+            <p class="title is-4">{{ stats?.averageNumber | number:'1.1-1' }}</p>
+            <p class="subtitle is-6">Per Day</p>
+          </div>
+        </div>
+      </div>
+
+      <hr>
 
       <div class="level is-mobile">
         <div class="level-left">
@@ -86,38 +84,43 @@
               <span>Chicken</span>
             </a>
           </div>
-
         </div>
-
       </div>
-
-      <div *ngFor="let chicken of chickens" class="media">
-        <div class="media-left">
-          <a [routerLink]="['/chicken', chicken.$key]">
-            <div class="profile-image-sm" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
-          </a>
-        </div>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <a [routerLink]="['/chicken', chicken.$key]">
-                <strong>{{ chicken.name }}</strong>
-              </a>
-            </p>
-            <p *ngIf="stats?.mostEggs === chicken.$key">
-              <span class="icon">
-                <i class="fa fa-trophy" aria-hidden="true"></i>
-              </span> Top Producer
-            </p>
-            <p *ngIf="stats?.heaviest && stats?.heaviest.chickenId === chicken.$key">
-              <span class="icon">
-                <i class="fa fa-trophy" aria-hidden="true"></i>
-              </span> Heaviest Egg
-            </p>
+      <div *ngIf="chickens.length > 0">
+        <div *ngFor="let chicken of chickens" class="media">
+          <div class="media-left">
+            <a [routerLink]="['/chicken', chicken.$key]">
+              <div class="profile-image-sm" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
+            </a>
+          </div>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <a [routerLink]="['/chicken', chicken.$key]">
+                  <strong>{{ chicken.name }}</strong>
+                </a>
+              </p>
+              <p *ngIf="stats?.mostEggs === chicken.$key">
+                <span class="icon">
+                  <i class="fa fa-trophy" aria-hidden="true"></i>
+                </span> Top Producer
+              </p>
+              <p *ngIf="stats?.heaviest && stats?.heaviest.chickenId === chicken.$key">
+                <span class="icon">
+                  <i class="fa fa-trophy" aria-hidden="true"></i>
+                </span> Heaviest Egg
+              </p>
+            </div>
+          </div>
+          <div class="media-right">
+            <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
           </div>
         </div>
-        <div class="media-right">
-          <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
+      </div>
+
+      <div *ngIf="chickens.length === 0" class="level is-mobile">
+        <div class="level-item">
+          <em>No Chickens Added Yet</em>
         </div>
       </div>
     </div>

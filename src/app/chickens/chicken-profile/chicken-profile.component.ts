@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import { Egg, Chicken } from '../../shared/models';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -10,12 +12,13 @@ import * as moment from 'moment';
   templateUrl: './chicken-profile.component.html',
   styleUrls: ['./chicken-profile.component.scss']
 })
-export class ChickenProfileComponent implements OnInit {
+export class ChickenProfileComponent implements OnInit, OnDestroy {
   chicken: Observable<Chicken> = null;
   heaviest: Egg;
   longestStreak: number;
   total: number;
   flockId: string;
+  private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -23,15 +26,18 @@ export class ChickenProfileComponent implements OnInit {
     private chickenService: ChickenService,
     private eggService: EggService
   ) {
+  }
+
+  ngOnInit() {
     this.route.params.subscribe(params => {
       const chickenId = params['chickenId'];
 
-      this.userService.currentUser.subscribe(user => {
+      this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
         if (user) {
           this.flockId = user.currentFlockId;
           this.chicken = this.chickenService.getChicken(this.flockId, chickenId)
             .map(chicken => {
-              this.eggService.getEggsByChickenId(this.flockId, chickenId).subscribe(eggs => {
+              this.eggService.getEggsByChickenId(this.flockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {
                 this.total = eggs.length;
                 if (this.total > 0) {
                   const stats = this.buildStats(eggs);
@@ -46,7 +52,10 @@ export class ChickenProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    // clean up subscriptions
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 
   buildStats(eggs: Egg[]) {
@@ -97,12 +106,12 @@ export class ChickenProfileComponent implements OnInit {
         heaviest = +egg.weight;
         heaviestEgg = egg;
       }
-     });
+    });
 
-     const stats = new ChickenStats();
-     stats.heaviest = heaviestEgg;
-     stats.longestStreak = longestStreak;
-     return stats;
+    const stats = new ChickenStats();
+    stats.heaviest = heaviestEgg;
+    stats.longestStreak = longestStreak;
+    return stats;
   }
 }
 export class ChickenStats {

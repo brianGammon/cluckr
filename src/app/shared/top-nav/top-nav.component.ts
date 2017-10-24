@@ -32,8 +32,9 @@ export class TopNavComponent implements OnInit {
   currentFlock: Flock;
   dayString: string = moment().format('DD');
   monthString: string = moment().format('YYYY-MM');
-  flocksSubscription: Subscription;
   show = false;
+
+  private flocksSubscription: Subscription;
 
   constructor(
     private userService: UserService,

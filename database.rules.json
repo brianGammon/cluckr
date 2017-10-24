@@ -3,14 +3,20 @@
     ".read": false,
     ".write": false,
     "users": {
-      ".read": false,
+      ".read": "auth != null",
       ".write": false,
       "$uid": {
         ".validate": "newData.hasChildren(['email'])",
         ".read": "auth.uid == $uid",
         ".write": "auth.uid == $uid",
         "currentFlockId": {
-          ".validate": "!newData.exists() || newData.parent().child('flocks').child(newData.val()).val() == true"
+          ".validate": "!newData.exists() || newData.parent().child('flocks').child(newData.val()).val() == true",
+          ".write": "!newData.exists() && auth != null"
+        },
+        "flocks": {
+          "$flockId": {
+            ".write": "!newData.exists() && root.child('flocks').child($flockId).child('ownedBy').val() == auth.uid"
+          }
         }
       }
     },
@@ -19,7 +25,7 @@
       ".write": false,
       "$flockId": {
         ".read": "root.child('users').child(auth.uid).child('flocks').child($flockId).val() == true",
-        ".write": "root.child('users').child(auth.uid).child('flocks').child($flockId).val() == true",
+        ".write": "root.child('users').child(auth.uid).child('flocks').child($flockId).val() == true || (!newData.exists() && root.child('flocks').child($flockId).child('ownedBy').val() == auth.uid)",
         ".indexOn": ["date", "chickenId"],
         "$eggId": {
           ".validate": "newData.hasChildren(['date', 'chickenId', 'userId', 'modified'])"

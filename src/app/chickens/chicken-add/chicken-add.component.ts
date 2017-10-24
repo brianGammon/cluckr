@@ -13,7 +13,8 @@ export class ChickenAddComponent implements OnInit {
   chickenForm: FormGroup;
   location: Location;
   imageData: ImageProcessingResult;
-  loadingMessage = null;
+  loadingMessage: string = null;
+  errorMessage: string = null;
 
   formErrors = {
     'name': ''
@@ -54,6 +55,7 @@ export class ChickenAddComponent implements OnInit {
   }
 
   addChicken() {
+    this.errorMessage = null;
     this.userService.currentUser.take(1).subscribe(user => {
       if (user && this.chickenForm.valid) {
         // Save resized images to storage
@@ -64,6 +66,7 @@ export class ChickenAddComponent implements OnInit {
           this.uploadService.pushUpload(this.imageData.imageSet, user['$key'], user.currentFlockId)
             .then(uploadResult => this.saveChicken(user, uploadResult))
             .catch(err => {
+              this.errorMessage = 'Oops, something went wrong 😩';
               this.loadingMessage = null;
               this.imageData = null;
               console.log(err);
@@ -81,14 +84,16 @@ export class ChickenAddComponent implements OnInit {
   }
 
   onImageChange(event) {
+    this.errorMessage = null;
     this.imageData = null;
     this.loadingMessage = 'Resizing your image...';
     if (event.target.files[0]) {
       this.imageService.processImage(event.target.files[0]).then(data => {
         this.imageData = data;
-        this.loadingMessage = false;
+        this.loadingMessage = null;
       }).catch(err => {
         console.log(err);
+        this.errorMessage = 'Oops, something went wrong 😩';
         this.loadingMessage = null;
       });
     }

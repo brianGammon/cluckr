@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import { UserService, FlockService } from '../../shared/services';
 import { User, Flock } from '../../shared/models';
 
@@ -9,11 +11,12 @@ import { User, Flock } from '../../shared/models';
   templateUrl: './flocks.component.html',
   styleUrls: ['./flocks.component.scss']
 })
-export class FlocksComponent implements OnInit {
+export class FlocksComponent implements OnInit, OnDestroy {
   flocks: Observable<Flock[]> = null;
   user: User;
   newFlockName: string;
   joinFlockId: string;
+  private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -23,12 +26,18 @@ export class FlocksComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.currentUser.subscribe(user => {
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
       if (user) {
         this.user = user;
         this.flocks = this.flockService.getFlocks(user);
       }
     });
+  }
+
+  ngOnDestroy() {
+    // clean up subscriptions
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 
   addFlock() {
@@ -51,12 +60,7 @@ export class FlocksComponent implements OnInit {
 
   joinFlock() {
     if (this.joinFlockId) {
-      this.flockService.joinFlock(this.joinFlockId, this.user['$key'])
-        .then(data => {
-          console.log(data);
-
-          return this.userService.linkFlock(this.joinFlockId);
-        })
+      this.userService.linkFlock(this.joinFlockId)
         .then(() => {
           this.router.navigateByUrl('/flock');
         })
@@ -71,13 +75,20 @@ export class FlocksComponent implements OnInit {
 
   deleteFlock(flockId: string) {
     if (window.confirm('Are you sure? Click OK to delete the flock, along with chickens and eggs belonging to it.')) {
-      if (this.user.currentFlockId === flockId) {
-        this.userService.setCurrentFlockId(null);
-      }
+      this.userService.getFlockMembers(flockId).take(1).subscribe(users => {
+        const unlinkUsers = [];
 
-      this.flockService.deleteFlock(this.user['$key'], flockId)
-        .then(() => this.userService.unlinkFlock(flockId))
-        .catch(err => console.log(err));
+        users.forEach(user => {
+          unlinkUsers.push(this.userService.unlinkFlock(flockId, user['$key']));
+        });
+
+        Promise.all(unlinkUsers)
+          .then(() => this.flockService.deleteFlock(this.user['$key'], flockId))
+          .catch(err => {
+            console.log(err);
+            throw new Error(err);
+          });
+      });
     }
   }
 }

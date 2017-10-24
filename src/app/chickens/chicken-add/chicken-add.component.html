@@ -1,3 +1,7 @@
+<div *ngIf="errorMessage" class="notification is-danger">
+  {{ errorMessage }}
+</div>
+
 <form [formGroup]="chickenForm" (ngSubmit)="addChicken()">
   <div class="level is-mobile">
     <div class="level-left">

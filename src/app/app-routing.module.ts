@@ -10,6 +10,7 @@ import { ChickenProfileComponent } from './chickens/chicken-profile/chicken-prof
 import { FlocksComponent } from './flocks/flocks/flocks.component';
 import { FlockComponent } from './flocks/flock/flock.component';
 import { ChickenAddComponent } from './chickens/chicken-add/chicken-add.component';
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/flock', pathMatch: 'full' },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'chicken-add', component: ChickenAddComponent, canActivate: [AuthGuard] },
   { path: 'flocks', component: FlocksComponent, canActivate: [AuthGuard] },
   { path: 'flock', component: FlockComponent, canActivate: [AuthGuard] },
-  { path: 'add', component: EggsAddComponent, canActivate: [AuthGuard]}
+  { path: 'add', component: EggsAddComponent, canActivate: [AuthGuard]},
+  { path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

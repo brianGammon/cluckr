@@ -8,6 +8,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { TopNavComponent } from './top-nav/top-nav.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   providers: [
@@ -26,11 +27,13 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
   ],
   declarations: [
     LoadingSpinnerComponent,
-    TopNavComponent
+    TopNavComponent,
+    PageNotFoundComponent
   ],
   exports: [
     LoadingSpinnerComponent,
-    TopNavComponent
+    TopNavComponent,
+    PageNotFoundComponent
   ]
 })
 export class SharedModule { }

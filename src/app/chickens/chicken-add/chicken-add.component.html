@@ -12,7 +12,7 @@
   </div>
 
   <label for="name">Name</label>
-  <input type="text" id="name" class="input" formControlName="name" required>
+  <input #setFocus type="text" id="name" class="input" formControlName="name" required>
 
   <div *ngIf="formErrors.name" class="help is-danger">
     {{ formErrors.name }}

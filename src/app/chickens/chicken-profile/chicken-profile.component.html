@@ -44,7 +44,7 @@
     </div>
   </article>
   <hr>
-  <div class="content">
+  <div *ngIf="stats">
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
@@ -62,32 +62,57 @@
         </div>
       </div>
     </div>
-    <div *ngIf="total === 0" class="level is-mobile">
+    <div *ngIf="stats.total === 0" class="level is-mobile">
       <div class="level-item">
         <em>No Eggs Logged Yet</em>
       </div>
     </div>
-    <div *ngIf="total > 0" class="level is-mobile">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Eggs</p>
-          <p class="title is-4">{{ total }}</p>
-          <p class="subtitle is-6">Total</p>
+    <div *ngIf="stats.total > 0">
+      <div class="level is-mobile content">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Eggs</p>
+            <p class="title is-4">{{ stats.total }}</p>
+            <p class="subtitle is-6">Total</p>
+          </div>
+        </div>
+        <div *ngIf="stats.heaviest" class="level-item has-text-centered">
+          <div>
+            <p class="heading">Heaviest</p>
+            <p class="title is-4">{{ stats.heaviest.weight }}g</p>
+            <p class="subtitle is-6">on {{ stats.heaviest.date | date }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Longest Streak</p>
+            <p class="title is-4">{{ stats.longestStreak }}</p>
+            <p class="subtitle is-6">{{ stats.longestStreak === 1 ? 'Day' : 'Days' }}</p>
+          </div>
         </div>
       </div>
-      <div *ngIf="heaviest" class="level-item has-text-centered">
-        <div>
-          <p class="heading">Heaviest</p>
-          <p class="title is-4">{{ heaviest?.weight }}g</p>
-          <p class="subtitle is-6">on {{ heaviest?.date | date }}</p>
+
+      <div id="week-trend" class="level is-mobile">
+        <div class="level-left"></div>
+        <div class="level-item">
+          <p class="heading">Last 7 Days</p>
         </div>
       </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Longest Streak</p>
-          <p class="title is-4">{{ longestStreak }}</p>
-          <p class="subtitle is-6">{{ longestStreak === 1 ? 'Day' : 'Days' }}</p>
-        </div>
+      <div class="columns is-mobile is-variable is-1">
+        <a *ngFor="let key of objectKeys(stats.lastSevenDays)" class="column" [routerLink]="['/eggs/day', key]">
+          <div class="has-text-centered box">
+            <p class="is-size-7">{{ key | date:'MMM' }}</p>
+            <p>{{ key | date:'d' }}</p>
+            <p>
+              <span *ngIf="stats.lastSevenDays[key] > 0" class="icon has-text-success">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+              </span>
+              <span *ngIf="stats.lastSevenDays[key] === 0" class="icon has-text-grey">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+              </span>
+            </p>
+          </div>
+        </a>
       </div>
     </div>
   </div>

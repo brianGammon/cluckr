@@ -14,10 +14,9 @@ import * as moment from 'moment';
 })
 export class ChickenProfileComponent implements OnInit, OnDestroy {
   chicken: Observable<Chicken> = null;
-  heaviest: Egg;
-  longestStreak: number;
-  total: number;
-  flockId: string;
+  stats: ChickenStats;
+  objectKeys = Object.keys;
+
   private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
@@ -34,16 +33,10 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
 
       this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
         if (user) {
-          this.flockId = user.currentFlockId;
-          this.chicken = this.chickenService.getChicken(this.flockId, chickenId)
+          this.chicken = this.chickenService.getChicken(user.currentFlockId, chickenId)
             .map(chicken => {
-              this.eggService.getEggsByChickenId(this.flockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {
-                this.total = eggs.length;
-                if (this.total > 0) {
-                  const stats = this.buildStats(eggs);
-                  this.heaviest = stats.heaviest;
-                  this.longestStreak = stats.longestStreak;
-                }
+              this.eggService.getEggsByChickenId(user.currentFlockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {
+                this.stats = this.buildStats(eggs);
               });
               return chicken;
             });
@@ -64,6 +57,15 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
     let streakCount = 0;
     let longestStreak = 0;
     let lastEggDate = null;
+
+    const lastSevenDays = {};
+    const startDay = moment().subtract(6, 'day');
+    lastSevenDays[startDay.format('YYYY-MM-DD')] = 0;
+    let daysAdded = 1;
+    while (daysAdded < 7) {
+      lastSevenDays[startDay.add(1, 'day').format('YYYY-MM-DD')] = 0;
+      daysAdded++;
+    }
 
     const sortedEggs = _.sortBy(eggs, 'date');
     _.forEach(sortedEggs, function (egg) {
@@ -106,15 +108,24 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
         heaviest = +egg.weight;
         heaviestEgg = egg;
       }
+
+      // Track the past 7 days eggs
+      if (lastSevenDays.hasOwnProperty(egg.date)) {
+        lastSevenDays[egg.date]++;
+      }
     });
 
     const stats = new ChickenStats();
+    stats.total = eggs.length;
     stats.heaviest = heaviestEgg;
     stats.longestStreak = longestStreak;
+    stats.lastSevenDays = lastSevenDays;
     return stats;
   }
 }
 export class ChickenStats {
+  total: number;
   heaviest: Egg;
   longestStreak: number;
+  lastSevenDays: {};
 }

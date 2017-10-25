@@ -22,6 +22,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
       "styles": [
+        "../node_modules/bulma/css/bulma.css",
         "../node_modules/angular-calendar/dist/css/angular-calendar.css",
         "../src/styles/cluckr.app.scss"
       ],

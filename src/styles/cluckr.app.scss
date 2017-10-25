@@ -55,6 +55,10 @@ app-root:empty + .loading {
   .cal-header {
     font-size: xx-small;
   }
+  .cal-month-view {
+    margin-left: -.5rem !important;
+    margin-right: -.5rem !important;
+  }
 }
 
 .cal-day-badge {

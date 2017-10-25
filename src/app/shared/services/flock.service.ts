@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 import { ChickenService } from './chicken.service';
 import { EggService } from './egg.service';
 import { Flock } from '../models/flock';

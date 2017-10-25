@@ -1,0 +1,14 @@
+{
+    "short_name": "Cluckr",
+    "name": "Cluckr - Backyard Hen Egg Tracker",
+    "start_url": "/",
+
+    "theme_color": "#f48c5b",
+    "background_color": "#ffffff",
+
+    "display": "standalone",
+    "orientation": "portrait",
+
+    "icons": [
+    ]
+  }

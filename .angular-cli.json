@@ -10,6 +10,8 @@
       "assets": [
         "assets",
         "favicon.ico",
+        "apple-touch-icon.png",
+        "browserconfig.xml",
         "manifest.json"
       ],
       "index": "index.html",
@@ -21,7 +23,7 @@
       "prefix": "",
       "styles": [
         "../node_modules/angular-calendar/dist/css/angular-calendar.css",
-        "../src/assets/styles/cluckr.app.scss"
+        "../src/styles/cluckr.app.scss"
       ],
       "scripts": [
         "../node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"

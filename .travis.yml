@@ -14,7 +14,7 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-  - if [ "$TRAVIS_BRANCH" = "dev" ]; then ng lint && ng build; fi
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then ng lint && node build/pre-build.js && ng build; fi
   - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run pwa; fi
 
 after_success:

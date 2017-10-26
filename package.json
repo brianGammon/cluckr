@@ -1,6 +1,6 @@
 {
   "name": "cluckr",
-  "version": "0.0.0",
+  "version": "0.5.2",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pwa": "node firebase.set-prod-config.js && ng build --prod && sw-precache --root=dist --config=precache-config.js"
+    "pwa": "node build/pre-build.js --prod && ng build --prod && sw-precache --root=dist --config=precache-config.js"
   },
   "private": true,
   "dependencies": {

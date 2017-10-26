@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { environment } from '../../../environments/environment';
 import { UserService, FlockService } from '../../shared/services';
 import { Subscription } from 'rxjs/Subscription';
 import { User, Flock } from '../models';
@@ -32,6 +33,7 @@ export class TopNavComponent implements OnInit {
   currentFlock: Flock;
   dayString: string = moment().format('DD');
   monthString: string = moment().format('YYYY-MM');
+  appVersion: string = environment.appVersion;
   show = false;
 
   private flocksSubscription: Subscription;

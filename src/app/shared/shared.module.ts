@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 import { UserService, FlockService, ChickenService, EggService, UploadService, ImageService } from './services';
+import { SwRegistrationService } from './services/sw-registration.service';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { TopNavComponent } from './top-nav/top-nav.component';
@@ -17,7 +18,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ChickenService,
     EggService,
     UploadService,
-    ImageService
+    ImageService,
+    SwRegistrationService
   ],
   imports: [
     CommonModule,

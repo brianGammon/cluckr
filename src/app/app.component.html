@@ -1,14 +1,23 @@
 <top-nav></top-nav>
 <div class="section">
   <div class="columns">
-
-
     <main class="column is-8">
       <router-outlet></router-outlet>
     </main>
+  </div>
+</div>
 
-    <aside class="column is-1">
-    </aside>
-
+<div *ngIf="updateAvailable" class="notification is-info">
+  <div class="level is-mobile">
+    <div class="level-left">
+      Please refresh for a new version...
+    </div>
+    <div class="level-right">
+      <a (click)="refresh()" class="level-item button is-info">
+        <span class="icon is-small">
+          <i class="fa fa-refresh"></i>
+        </span>
+      </a>
+    </div>
   </div>
 </div>

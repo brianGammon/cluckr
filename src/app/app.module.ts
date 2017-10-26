@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,12 +13,15 @@ export const firebaseConfig = environment.firebaseConfig;
 
 
 import { SharedModule } from './shared/shared.module';
-
+import { SwRegistrationService } from './shared/services/sw-registration.service';
 import { FlocksModule } from './flocks/flocks.module';
 import { EggsModule } from './eggs/eggs.module';
 import { ChickensModule } from './chickens/chicken.module';
 import { UsersModule } from './users/users.module';
 
+export function init(swRegistrationService: SwRegistrationService) {
+  return () => swRegistrationService.init();
+}
 
 @NgModule({
   declarations: [
@@ -35,6 +38,14 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule
+  ],
+  providers: [
+    {
+      'provide': APP_INITIALIZER,
+      'useFactory': init,
+      'deps': [SwRegistrationService],
+      'multi': true
+    }
   ],
   bootstrap: [
     AppComponent

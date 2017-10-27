@@ -1,0 +1,7 @@
+<div class="modal" [ngClass]="{'is-active': showModal}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <img class="image" [src]="imageUrl ? imageUrl : '/assets/images/default-profile-photo.png'" alt="">
+  </div>
+  <button class="modal-close is-large" (click)="toggleModal()" aria-label="close"></button>
+</div>

@@ -17,6 +17,7 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
   index: number;
   stats: ChickenStats;
   objectKeys = Object.keys;
+  showModal = false;
 
   private unsubscriber: Subject<void> = new Subject<void>();
 
@@ -34,6 +35,7 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
         this.chickenService.getChickensList(user.currentFlockId).takeUntil(this.unsubscriber).subscribe((chickens: Chicken[]) => {
           this.chickens = chickens;
           this.route.params.subscribe(params => {
+            this.showModal = false;
             const chickenId = params['chickenId'];
             this.index = chickens.findIndex(chicken => chicken['$key'] === chickenId);
             this.eggService.getEggsByChickenId(user.currentFlockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {

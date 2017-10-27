@@ -1,14 +1,30 @@
-<div *ngIf="chicken | async; let chicken; else loading">
+<div *ngIf="chickens">
   <div class="level is-mobile">
     <div class="level-left">
       <div class="level-item">
         <p class="title is-6">Chicken Profile</p>
       </div>
     </div>
+    <div *ngIf="chickens.length > 1" class="level-right">
+      <div class="level-item">
+        <button class="button" [disabled]="index === 0" [routerLink]="['/chicken', index > 0 ? chickens[index - 1]['$key'] : chickens[index]['$key']]">
+          <span class="icon is-small">
+            <i class="fa fa-chevron-left"></i>
+          </span>
+        </button>
+      </div>
+      <div class="level-item next-right">
+        <button class="button" [disabled]="index+1 === chickens.length" [routerLink]="['/chicken', index < chickens.length - 1 ? chickens[index + 1]['$key'] : chickens[index]['$key']]">
+          <span class="icon is-small">
+            <i class="fa fa-chevron-right"></i>
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
   <article class="media">
     <figure class="media-left">
-      <div class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
+      <div class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (chickens[index].thumbnailUrl ? chickens[index].thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
 
       </div>
     </figure>
@@ -19,24 +35,24 @@
             Name
           </span>
           <span class="title is-6">
-            {{ chicken.name }}
+            {{ chickens[index].name }}
           </span>
         </p>
 
-        <p *ngIf="chicken.breed">
+        <p *ngIf="chickens[index].breed">
           <span class="heading">
             Breed
           </span>
           <span class="title is-6">
-            {{ chicken.breed }}
+            {{ chickens[index].breed }}
           </span>
         </p>
-        <p *ngIf="chicken.hatched">
+        <p *ngIf="chickens[index].hatched">
           <span class="heading">
             Hatched
           </span>
           <span class="title is-6">
-            {{ chicken.hatched }}
+            {{ chickens[index].hatched }}
           </span>
         </p>
       </div>
@@ -53,7 +69,7 @@
       </div>
       <div class="level-right">
         <div class="level-item has-text-centered">
-          <a class="button is-small is-primary" routerLink="/add" [queryParams]="{chickenId: chicken.$key}">
+          <a class="button is-small is-primary" routerLink="/add" [queryParams]="{chickenId: chickens[index].$key}">
             <span class="icon">
               <i class="fa fa-plus" aria-hidden="true"></i>
             </span>

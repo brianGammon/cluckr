@@ -13,7 +13,8 @@ import * as moment from 'moment';
   styleUrls: ['./chicken-profile.component.scss']
 })
 export class ChickenProfileComponent implements OnInit, OnDestroy {
-  chicken: Observable<Chicken> = null;
+  chickens: Chicken[];
+  index: number;
   stats: ChickenStats;
   objectKeys = Object.keys;
 
@@ -28,20 +29,22 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const chickenId = params['chickenId'];
-
-      this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
-        if (user) {
-          this.chicken = this.chickenService.getChicken(user.currentFlockId, chickenId)
-            .map(chicken => {
-              this.eggService.getEggsByChickenId(user.currentFlockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {
-                this.stats = this.buildStats(eggs);
-              });
-              return chicken;
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
+      if (user) {
+        this.chickenService.getChickensList(user.currentFlockId).takeUntil(this.unsubscriber).subscribe((chickens: Chicken[]) => {
+          this.chickens = chickens;
+          this.route.params.subscribe(params => {
+            const chickenId = params['chickenId'];
+            this.index = chickens.findIndex(chicken => chicken['$key'] === chickenId);
+            this.eggService.getEggsByChickenId(user.currentFlockId, chickenId).takeUntil(this.unsubscriber).subscribe(eggs => {
+              this.stats = this.buildStats(eggs);
             });
-        }
-      });
+          });
+        });
+      } else {
+        this.chickens = null;
+        this.stats = null;
+      }
     });
   }
 

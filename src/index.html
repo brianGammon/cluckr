@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Cluckr</title>
@@ -11,7 +12,8 @@
   <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="mobile-web-app-capable" content="yes">
@@ -19,13 +21,31 @@
   <meta name="msapplication-starturl" content="/">
   <meta name="theme-color" content="#f48c5b">
 </head>
+
 <body>
 
-  <app-root></app-root>
+  <app-root>
+    <style>
+      .loading {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        background: #272c33;
+        padding-top: 25vh;
+        text-align: center;
+      }
 
-  <div class="loading">
-    <h1>~$ bootstrapping Cluckr...</h1>
-  </div>
+      p {
+        font-family: "courier", monospace;
+        color: #EEE;
+      }
+    </style>
+    <div class="loading">
+      <img src="/assets/icons/android-chrome-192x192.png" alt="">
+      <p>Loading Cluckr...</p>
+    </div>
+  </app-root>
 
 </body>
+
 </html>

@@ -24,10 +24,6 @@ export class ChickenService {
     return this.db.list(`chickens/${flockId}`);
   }
 
-  getChickens(flockId: string) {
-    return this.db.object(`chickens/${flockId}`);
-  }
-
   addChicken(flockId: string, chicken: Chicken) {
     const ref = this.db.list(`chickens/${flockId}`);
     return ref.push(chicken);

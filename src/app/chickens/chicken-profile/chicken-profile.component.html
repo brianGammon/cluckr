@@ -1,4 +1,4 @@
-<div *ngIf="chickens">
+<div *ngIf="index >= 0; else loading">
   <div class="level is-mobile">
     <div class="level-left">
       <div class="level-item">
@@ -24,7 +24,7 @@
   </div>
   <article class="media">
     <figure class="media-left">
-      <div class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (chickens[index].thumbnailUrl ? chickens[index].thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
+      <div class="profile-image" (click)="chickens[index].photoUrl ? showModal = !showModal : null" [ngStyle]="{ 'background-image': 'url(' + (chickens[index].thumbnailUrl ? chickens[index].thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
 
       </div>
     </figure>
@@ -132,6 +132,7 @@
       </div>
     </div>
   </div>
+  <image-viewer [(showModal)]="showModal" [imageUrl]="chickens[index].photoUrl"></image-viewer>
 </div>
 
 <ng-template #loading>

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService, FlockService, ChickenService, EggService } from '../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from 'lodash';
+import { sortBy} from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -73,7 +73,7 @@ export class FlockComponent implements OnInit, OnDestroy {
     let daysSinceFirst = 0;
     const eggsPerChicken: any = {};
 
-    const sortedEggs = _.sortBy(eggs, 'date');
+    const sortedEggs = sortBy(eggs, 'date');
 
     sortedEggs.forEach((egg: Egg) => {
       if (!earliestDate) {

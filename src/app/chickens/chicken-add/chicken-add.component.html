@@ -2,11 +2,11 @@
   {{ errorMessage }}
 </div>
 
-<form [formGroup]="chickenForm" (ngSubmit)="addChicken()">
+<form [formGroup]="chickenForm" (ngSubmit)="saveForm()">
   <div class="level is-mobile">
     <div class="level-left">
       <div class="level-item">
-        <p class="title is-6">Add Chicken</p>
+        <p class="title is-6">{{ chicken ? 'Edit' : 'Add' }} Chicken</p>
       </div>
     </div>
   </div>
@@ -21,52 +21,57 @@
   <label for="breed">Breed</label>
   <input type="text" id="breed" class="input" formControlName="breed">
 
-  <!-- <div *ngIf="formErrors.breed" class="help is-danger">
-    {{ formErrors.breed }}
-  </div> -->
-
   <label for="hatched">Hatched</label>
   <input type="date" id="hatched" class="input" formControlName="hatched">
 
-  <!-- <div *ngIf="formErrors.hatched" class="help is-danger">
-    {{ formErrors.hatched }}
-  </div> -->
-
   <label for="photo">Photo</label>
-  <!-- <input type="text" id="photo" class="input" formControlName="photo"> -->
-  <div class="level">
-    <div class="level-left">
-        <div *ngIf="!loadingMessage" class="profile-image" [ngStyle]="{ 'background-image': 'url(' + (imageData ? imageData.preview : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
-    </div>
-  </div>
   <loading-spinner *ngIf="loadingMessage" [message]="loadingMessage"></loading-spinner>
-
-
-  <div class="level is-mobile">
-    <div class="level-left">
+  <div *ngIf="!loadingMessage" class="level is-mobile">
+    <div class="level-left photo-picker">
       <div class="level-item">
-        <div class="file is-small">
-          <label class="file-label">
-            <input class="file-input" (change)="onImageChange($event)" type="file" accept="image/*" name="photo">
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fa fa-upload"></i>
+        <div class="is-inline-block profile-image" [ngStyle]="{ 'background-image': 'url(' + (imageData ? imageData.preview : chicken && chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
+      </div>
+      <div class="level-item">
+        <div>
+          <div class="file is-small photo-button">
+            <label class="file-label full-width">
+              <input class="file-input" (change)="onImageSelected($event)" type="file" accept="image/*" name="photo">
+              <span class="file-cta full-width">
+                <span class="file-icon">
+                  <i class="fa fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a photo...
+                </span>
               </span>
-              <span class="file-label">
-                Choose a photo...
+            </label>
+          </div>
+          <div class="photo-button">
+            <a *ngIf="imageData" class="button is-small full-width" (click)="resetPreview()">
+              <span class="icon is-small">
+                <i class="fa fa-undo"></i>
               </span>
-            </span>
-          </label>
+              <span>
+                Revert
+              </span>
+            </a>
+          </div>
+          <div>
+            <a *ngIf="chicken && chicken.photoUrl && !imageData" class="button is-small" (click)="removeProfileImage()">
+              <span class="icon is-small">
+                <i class="fa fa-ban"></i>
+              </span>
+              <span>
+                Delete Profile Photo
+              </span>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="level-item">
-        <a class="button is-small" (click)="resetPreview()">Clear</a>
-      </div>
     </div>
   </div>
 
-
-  <button type="submit" class="button is-primary" [disabled]="!chickenForm.valid">Submit</button>
+  <button type="submit" class="button is-primary" [disabled]="!chickenForm.valid">Save</button>
   <a class="button" (click)="location.back()">Cancel</a>
 
 </form>

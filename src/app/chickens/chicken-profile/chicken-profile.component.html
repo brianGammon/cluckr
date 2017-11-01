@@ -4,6 +4,13 @@
       <div class="level-item">
         <p class="title is-6">Chicken Profile</p>
       </div>
+      <div *ngIf="isFlockOwner" class="level-item">
+          <a class="button is-white" [routerLink]="['/chicken/edit', chickens[index]['$key']]">
+            <span class="icon">
+              <i class="fa fa-pencil"></i>
+            </span>
+          </a>
+      </div>
     </div>
     <div *ngIf="chickens.length > 1" class="level-right">
       <div class="level-item">

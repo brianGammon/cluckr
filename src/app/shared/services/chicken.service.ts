@@ -24,9 +24,21 @@ export class ChickenService {
     return this.db.list(`chickens/${flockId}`);
   }
 
-  addChicken(flockId: string, chicken: Chicken) {
-    const ref = this.db.list(`chickens/${flockId}`);
-    return ref.push(chicken);
+  saveChicken(flockId: string, chicken: Chicken): Promise<void> {
+    const promise = new Promise<void>((resolve, reject) => {
+      if (chicken['$key']) {
+        this.db.object(`chickens/${flockId}/${chicken['$key']}`)
+          .set(chicken)
+          .then(() => resolve())
+          .catch(err => reject(err));
+      } else {
+        const ref = this.db.list(`chickens/${flockId}`);
+        ref.push(chicken)
+          .then(() => resolve())
+          .catch(err => reject(err));
+      }
+    });
+    return promise;
   }
 
   deleteChicken(flockId: string, chicken: Chicken) {

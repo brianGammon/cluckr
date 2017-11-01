@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserService, ChickenService, EggService } from '../../shared/services';
+import { UserService, ChickenService, EggService, FlockService } from '../../shared/services';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { Egg, Chicken } from '../../shared/models';
-import * as _ from 'lodash';
+import { sortBy, forEach } from 'lodash';
 import * as moment from 'moment';
 
 @Component({
@@ -18,6 +18,7 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
   stats: ChickenStats;
   objectKeys = Object.keys;
   showModal = false;
+  isFlockOwner = false;
 
   private unsubscriber: Subject<void> = new Subject<void>();
 
@@ -25,13 +26,17 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private chickenService: ChickenService,
-    private eggService: EggService
+    private eggService: EggService,
+    private flockService: FlockService
   ) {
   }
 
   ngOnInit() {
     this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
       if (user) {
+        this.flockService.getFlock(user.currentFlockId).take(1)
+          .subscribe(flock => this.isFlockOwner = (flock && user['$key'] === flock.ownedBy));
+
         this.chickenService.getChickensList(user.currentFlockId).takeUntil(this.unsubscriber).subscribe((chickens: Chicken[]) => {
           this.chickens = chickens;
           this.route.params.subscribe(params => {
@@ -46,6 +51,7 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
       } else {
         this.chickens = null;
         this.stats = null;
+        this.isFlockOwner = false;
       }
     });
   }
@@ -72,8 +78,8 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
       daysAdded++;
     }
 
-    const sortedEggs = _.sortBy(eggs, 'date');
-    _.forEach(sortedEggs, function (egg) {
+    const sortedEggs = sortBy(eggs, 'date');
+    forEach(sortedEggs, function (egg) {
       let resetStreak = false;
 
       // Determine the longest streak

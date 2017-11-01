@@ -77,7 +77,7 @@
         </div>
         <div class="level-right">
           <div *ngIf="flock.ownedBy === user['$key']" class="level-item has-text-centered">
-            <a class="button is-small is-outlined" routerLink="/chicken-add">
+            <a class="button is-small is-outlined" routerLink="/chicken/add">
               <span class="icon">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </span>
@@ -87,34 +87,36 @@
         </div>
       </div>
       <div *ngIf="chickens.length > 0">
-        <div *ngFor="let chicken of chickens" class="media">
-          <div class="media-left">
-            <a [routerLink]="['/chicken', chicken.$key]">
-              <div class="profile-image-sm" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
-            </a>
-          </div>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <a [routerLink]="['/chicken', chicken.$key]">
-                  <strong>{{ chicken.name }}</strong>
-                </a>
-              </p>
-              <p *ngIf="stats?.mostEggs === chicken.$key">
-                <span class="icon">
-                  <i class="fa fa-trophy" aria-hidden="true"></i>
-                </span> Top Producer
-              </p>
-              <p *ngIf="stats?.heaviest && stats?.heaviest.chickenId === chicken.$key">
-                <span class="icon">
-                  <i class="fa fa-trophy" aria-hidden="true"></i>
-                </span> Heaviest Egg
-              </p>
-            </div>
-          </div>
-          <div class="media-right">
-            <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
-          </div>
+        <div *ngFor="let chicken of chickens" class="box">
+            <div class="media">
+                <div class="media-left">
+                  <a [routerLink]="['/chicken', chicken.$key]">
+                    <div class="profile-image-sm" [ngStyle]="{ 'background-image': 'url(' + (chicken.thumbnailUrl ? chicken.thumbnailUrl : '/assets/images/default-profile-photo_thumb.png') + ')'}"></div>
+                  </a>
+                </div>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      <a [routerLink]="['/chicken', chicken.$key]">
+                        <strong>{{ chicken.name }}</strong>
+                      </a>
+                    </p>
+                    <p *ngIf="stats?.mostEggs === chicken.$key">
+                      <span class="icon">
+                        <i class="fa fa-trophy" aria-hidden="true"></i>
+                      </span> Top Producer
+                    </p>
+                    <p *ngIf="stats?.heaviest && stats?.heaviest.chickenId === chicken.$key">
+                      <span class="icon">
+                        <i class="fa fa-trophy" aria-hidden="true"></i>
+                      </span> Heaviest Egg
+                    </p>
+                  </div>
+                </div>
+                <div class="media-right">
+                  <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
+                </div>
+              </div>
         </div>
       </div>
 

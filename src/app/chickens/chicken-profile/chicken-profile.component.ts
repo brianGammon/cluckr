@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { Egg, Chicken } from '../../shared/models';
-import * as _ from 'lodash';
+import { sortBy, forEach } from 'lodash';
 import * as moment from 'moment';
 
 @Component({
@@ -72,8 +72,8 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
       daysAdded++;
     }
 
-    const sortedEggs = _.sortBy(eggs, 'date');
-    _.forEach(sortedEggs, function (egg) {
+    const sortedEggs = sortBy(eggs, 'date');
+    forEach(sortedEggs, function (egg) {
       let resetStreak = false;
 
       // Determine the longest streak

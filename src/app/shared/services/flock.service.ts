@@ -6,7 +6,7 @@ import { ChickenService } from './chicken.service';
 import { EggService } from './egg.service';
 import { Flock } from '../models/flock';
 import { User } from '../models/user';
-import * as _ from 'lodash';
+import { forOwn } from 'lodash';
 
 @Injectable()
 export class FlockService {
@@ -28,7 +28,7 @@ export class FlockService {
       return Observable.of([]);
     }
     const flocks: Array<Observable<Flock>> = [];
-    _.forOwn(user.flocks, (value, key) => {
+    forOwn(user.flocks, (value, key) => {
       flocks.push(this.getFlock(key));
     });
     return Observable.combineLatest(flocks);

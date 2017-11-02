@@ -9,7 +9,7 @@ import { CalendarModule } from 'angular-calendar';
 
 import { EggsDailyComponent } from './eggs-daily/eggs-daily.component';
 import { EggsMonthlyComponent } from './eggs-monthly/eggs-monthly.component';
-import { EggsAddComponent } from './eggs-add/eggs-add.component';
+import { EggEditorComponent } from './egg-editor/egg-editor.component';
 
 
 @NgModule({
@@ -23,8 +23,8 @@ import { EggsAddComponent } from './eggs-add/eggs-add.component';
   ],
   declarations: [
     EggsDailyComponent,
-    EggsAddComponent,
-    EggsMonthlyComponent
+    EggsMonthlyComponent,
+    EggEditorComponent
   ]
 })
 

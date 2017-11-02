@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 
-import { ChickenAddComponent } from './chicken-add/chicken-add.component';
+import { ChickenEditorComponent } from './chicken-editor/chicken-editor.component';
 import { ChickenProfileComponent } from './chicken-profile/chicken-profile.component';
 
 
@@ -18,7 +18,7 @@ import { ChickenProfileComponent } from './chicken-profile/chicken-profile.compo
     RouterModule
   ],
   declarations: [
-    ChickenAddComponent,
+    ChickenEditorComponent,
     ChickenProfileComponent
   ]
 })

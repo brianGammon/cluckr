@@ -11,10 +11,10 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
 import { Chicken, Egg } from '../../shared/models';
 
 @Component({
-  templateUrl: './eggs-add.component.html',
-  styleUrls: ['./eggs-add.component.scss']
+  templateUrl: './egg-editor.component.html',
+  styleUrls: ['./egg-editor.component.scss']
 })
-export class EggsAddComponent implements OnInit, OnDestroy {
+export class EggEditorComponent implements OnInit, OnDestroy {
   flockId: string;
   chickens: Observable<Chicken[]> = null;
   eggForm: FormGroup;

@@ -7,10 +7,10 @@ import { User, Chicken, ImageProcessingResult, UploadResult } from '../../shared
 import { forOwn } from 'lodash';
 
 @Component({
-  templateUrl: './chicken-add.component.html',
-  styleUrls: ['./chicken-add.component.scss']
+  templateUrl: './chicken-editor.component.html',
+  styleUrls: ['./chicken-editor.component.scss']
 })
-export class ChickenAddComponent implements OnInit, AfterViewInit {
+export class ChickenEditorComponent implements OnInit, AfterViewInit {
   chickenForm: FormGroup;
   location: Location;
   imageData: ImageProcessingResult;

@@ -8,6 +8,13 @@ import { Egg, Chicken } from '../../shared/models';
 import { sortBy, forEach } from 'lodash';
 import * as moment from 'moment';
 
+export class ChickenStats {
+  total: number;
+  heaviest: Egg;
+  longestStreak: number;
+  lastSevenDays: {};
+}
+
 @Component({
   templateUrl: './chicken-profile.component.html',
   styleUrls: ['./chicken-profile.component.scss']
@@ -133,10 +140,4 @@ export class ChickenProfileComponent implements OnInit, OnDestroy {
     stats.lastSevenDays = lastSevenDays;
     return stats;
   }
-}
-export class ChickenStats {
-  total: number;
-  heaviest: Egg;
-  longestStreak: number;
-  lastSevenDays: {};
 }

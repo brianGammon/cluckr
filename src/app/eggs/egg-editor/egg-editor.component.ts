@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserService, ChickenService, EggService } from '../../shared/services';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +9,7 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/shareReplay';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Chicken, Egg } from '../../shared/models';
+import { forOwn } from 'lodash';
 
 @Component({
   templateUrl: './egg-editor.component.html',
@@ -20,8 +21,6 @@ export class EggEditorComponent implements OnInit, OnDestroy {
   eggForm: FormGroup;
   location: Location;
   errorMessage: string = null;
-  private userId: string;
-  private unsubscriber: Subject<void> = new Subject<void>();
 
   formErrors = {
     'dateLaid': '',
@@ -43,8 +42,11 @@ export class EggEditorComponent implements OnInit, OnDestroy {
     }
   };
 
+  private userId: string;
+  private unsubscriber: Subject<void> = new Subject<void>();
+  private egg: Egg;
+
   constructor(
-    private router: Router,
     public locationService: Location,
     private route: ActivatedRoute,
     private userService: UserService,
@@ -58,14 +60,7 @@ export class EggEditorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const defaultDate = this.route.snapshot.queryParamMap.get('date') || moment().format('YYYY-MM-DD');
     const defaultChickenId = this.route.snapshot.queryParamMap.get('chickenId');
-
-    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
-      if (user) {
-        this.userId = user['$key'];
-        this.flockId = user.currentFlockId;
-        this.chickens = this.chickenService.getChickensList(user.currentFlockId).take(1).shareReplay();
-      }
-    });
+    const eggId = this.route.snapshot.paramMap.get('eggId');
 
     this.eggForm = this.fb.group({
       'dateLaid': [defaultDate, [
@@ -73,8 +68,7 @@ export class EggEditorComponent implements OnInit, OnDestroy {
       ]],
       'chickenId': [defaultChickenId ? defaultChickenId : '', [
         Validators.required
-      ]
-      ],
+      ]],
       'weight': ['', [
         Validators.max(110),
         Validators.min(20),
@@ -83,9 +77,28 @@ export class EggEditorComponent implements OnInit, OnDestroy {
       'damaged': [''],
       'notes': ['']
     });
+    this.eggForm.valueChanges.subscribe(data => this.onValueChanged());
 
-    this.eggForm.valueChanges.subscribe(data => this.onValueChanged(data));
-    this.onValueChanged(); // reset validation messages
+    this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
+      if (user) {
+        this.userId = user['$key'];
+        this.flockId = user.currentFlockId;
+        this.chickens = this.chickenService.getChickensList(user.currentFlockId).take(1).shareReplay();
+
+        if (eggId) {
+          this.eggService.getEgg(this.flockId, eggId).take(1).subscribe(egg => {
+            this.egg = egg;
+            this.eggForm.reset({
+              dateLaid: egg.date,
+              chickenId: egg.chickenId,
+              weight: egg.weight,
+              notes: egg.notes,
+              damaged: egg.damaged
+            });
+          });
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -96,24 +109,30 @@ export class EggEditorComponent implements OnInit, OnDestroy {
 
   addEgg() {
     if (this.eggForm.valid) {
+      let eggPromise;
       this.errorMessage = null;
       this.chickens.take(1).subscribe(chickens => {
         const id = this.eggForm.value['chickenId'];
         const chick = chickens.find(chicken => chicken['$key'] === id);
 
-        const egg = new Egg();
-        egg.date = this.eggForm.value['dateLaid'];
-        egg.chickenId = id;
-        egg.chickenName = chick ? chick.name : 'Unknown';
-        egg.weight = this.eggForm.value['weight'];
-        egg.damaged = !!this.eggForm.value['damaged'];
-        egg.notes = this.eggForm.value['notes'];
-        egg.userId = this.userId;
-        egg.modified = moment().utc().toISOString();
-        this.eggService.saveEgg(this.flockId, egg)
-          .then(data => {
-            this.location.back();
-          })
+        if (!this.egg) {
+          this.egg = new Egg();
+        }
+        this.egg.date = this.eggForm.value['dateLaid'];
+        this.egg.chickenId = id;
+        this.egg.chickenName = chick ? chick.name : 'Unknown';
+        this.egg.weight = this.eggForm.value['weight'];
+        this.egg.damaged = !!this.eggForm.value['damaged'];
+        this.egg.notes = this.eggForm.value['notes'];
+        this.egg.userId = this.userId;
+        this.egg.modified = moment().utc().toISOString();
+
+        if (this.egg['$key']) {
+          eggPromise = this.eggService.updateEgg(this.flockId, this.egg);
+        } else {
+          eggPromise = this.eggService.addEgg(this.flockId, this.egg);
+        }
+        eggPromise.then(() => this.location.back())
           .catch(error => {
             this.errorMessage = 'Oops, something went wrong 😩';
             console.log(error);
@@ -123,23 +142,20 @@ export class EggEditorComponent implements OnInit, OnDestroy {
   }
 
   // Updates validation state on form changes.
-  onValueChanged(data?: any) {
-    if (!this.eggForm) { return; }
-    const form = this.eggForm;
-    for (const field in this.formErrors) {
-      if (Object.prototype.hasOwnProperty.call(this.formErrors, field)) {
-        // clear previous error message (if any)
-        this.formErrors[field] = '';
-        const control = form.get(field);
-        if (control && control.dirty && !control.valid) {
-          const messages = this.validationMessages[field];
-          for (const key in control.errors) {
-            if (Object.prototype.hasOwnProperty.call(control.errors, key)) {
-              this.formErrors[field] += messages[key] + ' ';
-            }
-          }
-        }
+  private onValueChanged() {
+    // Loop over the pre-defined form error fields
+    forOwn(this.formErrors, (fieldValue, fieldKey) => {
+      // clear previous error message (if any)
+      this.formErrors[fieldKey] = '';
+      // if the control that matches that field name is dirty and invalid...
+      const control = this.eggForm.get(fieldKey);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[fieldKey];
+        // for each error in the control, display the matching error message
+        forOwn(control.errors, (msgValue, msgKey) => {
+          this.formErrors[fieldKey] += messages[msgKey] + ' ';
+        });
       }
-    }
+    });
   }
 }

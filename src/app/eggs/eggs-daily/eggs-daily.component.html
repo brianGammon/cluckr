@@ -66,14 +66,21 @@
         <div class="media-content">
           <div class="content">
             <div class="columns is-mobile">
-              <div class="column is-two-thirds">
+              <div class="column is-half-mobile is-two-thirds-tablet is-clipped">
                 <a *ngIf="egg.chickenId !== 'unknown'" [routerLink]="['/chicken', egg.chickenId]">{{ egg.chickenName }}</a>
                 <p *ngIf="egg.chickenId === 'unknown'">{{ egg.chickenName }}</p>
               </div>
-              <div *ngIf="egg.weight" class="column">
-                <span>
+              <div class="column is-one-quarter weight">
+                <span *ngIf="egg.weight">
                   {{ egg.weight }}g
                 </span>
+              </div>
+              <div class="column edit-icon">
+                  <a class="button is-white" [routerLink]="['/egg/edit', egg['$key']]">
+                    <span class="icon">
+                      <i class="fa fa-pencil"></i>
+                    </span>
+                  </a>
               </div>
             </div>
             <div *ngIf="egg.damaged" class="columns is-mobile">

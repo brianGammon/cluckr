@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/flock', pathMatch: 'full' },
   { path: 'login', component: UserLoginComponent, },
   { path: 'egg/add', component: EggEditorComponent, canActivate: [AuthGuard]},
-  { path: 'egg/edit/:chickenId', component: EggEditorComponent, canActivate: [AuthGuard]},
+  { path: 'egg/edit/:eggId', component: EggEditorComponent, canActivate: [AuthGuard]},
   { path: 'eggs/day/:date', component: EggsDailyComponent, canActivate: [AuthGuard]},
   { path: 'eggs/month/:date', component: EggsMonthlyComponent, canActivate: [AuthGuard]},
   { path: 'chicken/add', component: ChickenEditorComponent, canActivate: [AuthGuard] },

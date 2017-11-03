@@ -12,6 +12,10 @@ export class EggService {
   ) {
   }
 
+  getEgg(flockId: string, eggId: string) {
+    return this.db.object(`eggs/${flockId}/${eggId}`);
+  }
+
   getEggs(flockId: string) {
     return this.db.list(`eggs/${flockId}`);
   }
@@ -39,9 +43,13 @@ export class EggService {
     });
   }
 
-  saveEgg(flockId: string, egg: Egg) {
+  addEgg(flockId: string, egg: Egg) {
     const ref = this.db.list(`eggs/${flockId}`);
     return ref.push(egg);
+  }
+
+  updateEgg(flockId: string, egg: Egg) {
+    return this.db.object(`eggs/${flockId}/${egg['$key']}`).set(egg);
   }
 
   deleteEgg(flockId: string, eggId: string) {

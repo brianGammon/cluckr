@@ -51,7 +51,7 @@
 </div>
 <div class="field has-addons">
   <div class="control wide">
-    <input [(ngModel)]="newFlockName" class="input" type="text" placeholder="Enter a name for your flock">
+    <input [(ngModel)]="newFlockName" maxlength="25" class="input" type="text" placeholder="Enter a name for your flock">
   </div>
   <div class="control">
     <a class="button is-light" (click)="addFlock()">

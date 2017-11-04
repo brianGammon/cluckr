@@ -20,17 +20,17 @@
       <div class="level is-mobile wide">
         <div class="level-left">
           <div class="level-item" (click)="selectFlock(flock.$key)">
-              <span>{{ flock.name }}</span>
-              <span *ngIf="flock.$key === user.currentFlockId" class="has-text-success">
-                <span class="icon">
-                  <i class="fa fa-check-circle" aria-hidden="true"></i>
-                </span> Active
-              </span>
+            <span>{{ flock.name }}</span>
+            <span *ngIf="flock.$key === user.currentFlockId" class="has-text-success">
+              <span class="icon">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+              </span> Active
+            </span>
           </div>
         </div>
         <div class="level-right">
           <div class="level-item">
-              <button *ngIf="flock.ownedBy === user['$key']" class="delete" (click)="deleteFlock(flock.$key)"></button>
+            <button *ngIf="flock.ownedBy === user['$key']" class="delete" (click)="deleteFlock(flock.$key)"></button>
           </div>
         </div>
       </div>
@@ -49,19 +49,22 @@
     </div>
   </div>
 </div>
-<div class="field has-addons">
-  <div class="control wide">
-    <input [(ngModel)]="newFlockName" class="input" type="text" placeholder="Enter a name for your flock">
+<form (submit)="addFlock()">
+  <div class="field has-addons">
+    <div class="control wide">
+      <input [(ngModel)]="newFlockName" [ngModelOptions]="{standalone: true}" maxlength="25" class="input" type="text" placeholder="Enter a name for your flock">
+    </div>
+    <div class="control">
+      <a class="button is-light">
+        <span class="icon">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span>New</span>
+      </a>
+    </div>
   </div>
-  <div class="control">
-    <a class="button is-light" (click)="addFlock()">
-      <span class="icon">
-        <i class="fa fa-plus"></i>
-      </span>
-      <span>New</span>
-    </a>
-  </div>
-</div>
+</form>
+
 <hr>
 <div class="level is-mobile">
   <div class="level-left">
@@ -71,19 +74,24 @@
   </div>
 </div>
 
-<div class="field has-addons">
-  <div class="control wide">
-    <input [(ngModel)]="joinFlockId" class="input" type="text" placeholder="Enter a Flock ID">
+<form (submit)="joinFlock()">
+  <div class="field has-addons">
+    <div class="control wide">
+      <input [(ngModel)]="joinFlockId" [ngModelOptions]="{standalone: true}" class="input" type="text" placeholder="Enter a Flock ID">
+      <div *ngIf="flockNotFound && joinFlockId" class="help is-danger">
+        Error flock not found
+      </div>
+    </div>
+    <div class="control">
+      <a class="button is-light">
+        <span class="icon">
+          <i class="fa fa-link"></i>
+        </span>
+        <span>Join</span>
+      </a>
+    </div>
   </div>
-  <div class="control">
-    <a class="button is-light" (click)="joinFlock()">
-      <span class="icon">
-        <i class="fa fa-link"></i>
-      </span>
-      <span>Join</span>
-    </a>
-  </div>
-</div>
+</form>
 
 <div *ngIf="user?.currentFlockId" class="level">
   <div class="level-item">

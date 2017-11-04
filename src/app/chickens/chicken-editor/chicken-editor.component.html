@@ -12,14 +12,14 @@
   </div>
 
   <label for="name">Name</label>
-  <input #setFocus type="text" id="name" class="input" formControlName="name" required>
+  <input #setFocus type="text" id="name" class="input" formControlName="name" maxlength="25" required>
 
   <div *ngIf="formErrors.name" class="help is-danger">
     {{ formErrors.name }}
   </div>
 
   <label for="breed">Breed</label>
-  <input type="text" id="breed" class="input" formControlName="breed">
+  <input type="text" id="breed" class="input" formControlName="breed" maxlength="25">
 
   <label for="hatched">Hatched</label>
   <input type="date" id="hatched" class="input" formControlName="hatched">

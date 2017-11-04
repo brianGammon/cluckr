@@ -16,6 +16,7 @@ export class FlocksComponent implements OnInit, OnDestroy {
   user: User;
   newFlockName: string;
   joinFlockId: string;
+  flockNotFound = false;
   private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
@@ -52,19 +53,24 @@ export class FlocksComponent implements OnInit, OnDestroy {
         })
         .catch(err => console.log(err));
     } else {
-
       console.log('No flock name provided');
     }
-
   }
 
   joinFlock() {
     if (this.joinFlockId) {
-      this.userService.linkFlock(this.joinFlockId)
-        .then(() => {
-          this.router.navigateByUrl('/flock');
-        })
-        .catch(err => console.log(err));
+      this.flockNotFound = false;
+      this.flockService.getFlock(this.joinFlockId).take(1).subscribe(flock => {
+        if (flock.name) {
+          this.userService.linkFlock(this.joinFlockId)
+          .then(() => {
+            this.router.navigateByUrl('/flock');
+          })
+          .catch(err => console.log(err));
+        } else {
+          this.flockNotFound = true;
+        }
+      });
     }
   }
 

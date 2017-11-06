@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './shared/auth.guard';
 
-import { UserLoginComponent } from './users/user-login/user-login.component';
+import { SignupComponent } from './users/signup/signup.component';
+import { LoginComponent } from './users/login/login.component';
+import { ResetPasswordComponent } from './users/reset-password/reset-password.component';
 import { EggsDailyComponent } from './eggs/eggs-daily/eggs-daily.component';
 import { EggsMonthlyComponent } from './eggs/eggs-monthly/eggs-monthly.component';
 import { EggEditorComponent } from './eggs/egg-editor/egg-editor.component';
@@ -14,7 +16,9 @@ import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.co
 
 const routes: Routes = [
   { path: '', redirectTo: '/flock', pathMatch: 'full' },
-  { path: 'login', component: UserLoginComponent, },
+  { path: 'login', component: LoginComponent, data: { showLayout: false }},
+  { path: 'signup', component: SignupComponent, data: { showLayout: false }},
+  { path: 'reset-password', component: ResetPasswordComponent, data: { showLayout: false }},
   { path: 'egg/add', component: EggEditorComponent, canActivate: [AuthGuard]},
   { path: 'egg/edit/:eggId', component: EggEditorComponent, canActivate: [AuthGuard]},
   { path: 'eggs/day/:date', component: EggsDailyComponent, canActivate: [AuthGuard]},

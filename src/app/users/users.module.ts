@@ -5,8 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 
-import { UserLoginComponent } from './user-login/user-login.component';
-
+import { UserFormContainerComponent } from './user-form-container/user-form-container.component';
+import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   imports: [
@@ -17,7 +19,10 @@ import { UserLoginComponent } from './user-login/user-login.component';
     RouterModule
   ],
   declarations: [
-    UserLoginComponent
+    SignupComponent,
+    LoginComponent,
+    UserFormContainerComponent,
+    ResetPasswordComponent
   ]
 })
 

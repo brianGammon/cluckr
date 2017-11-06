@@ -1,0 +1,52 @@
+<user-form-container [errorMessage]="errorMessage">
+  <form [formGroup]="signupForm" (ngSubmit)="signup()">
+
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control has-icons-right">
+        <input #setFocus type="email" id="email" class="input" [ngClass]="{'is-danger': formErrors.email, 'is-success': !formErrors.email && signupForm.get('email').dirty}"
+          formControlName="email" autocomplete="username">
+        <span *ngIf="!formErrors.email && signupForm.get('email').dirty" class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+        <span *ngIf="formErrors.email" class="icon is-small is-right">
+          <i class="fa fa-warning"></i>
+        </span>
+      </div>
+      <p *ngIf="formErrors.email" class="help is-danger">{{ formErrors.email }}</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Password</label>
+      <div class="control has-icons-right">
+        <input #setFocus type="password" id="password" class="input" [ngClass]="{'is-danger': formErrors.password, 'is-success': !formErrors.password && signupForm.get('password').dirty}"
+          formControlName="password" autocomplete="new-password">
+        <span *ngIf="!formErrors.password && signupForm.get('password').dirty" class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+        <span *ngIf="formErrors.password" class="icon is-small is-right">
+          <i class="fa fa-warning"></i>
+        </span>
+      </div>
+      <p *ngIf="formErrors.password" class="help is-danger">{{ formErrors.password }}</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Confirm Password</label>
+      <div class="control has-icons-right">
+        <input #setFocus type="password" id="confirmPassword" class="input" [ngClass]="{'is-danger': formErrors.confirmPassword, 'is-success': !formErrors.confirmPassword && signupForm.get('confirmPassword').dirty}"
+          formControlName="confirmPassword" autocomplete="new-password">
+        <span *ngIf="!formErrors.confirmPassword && signupForm.get('confirmPassword').dirty" class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+        <span *ngIf="formErrors.confirmPassword" class="icon is-small is-right">
+          <i class="fa fa-warning"></i>
+        </span>
+      </div>
+      <p *ngIf="formErrors.confirmPassword" class="help is-danger">{{ formErrors.confirmPassword }}</p>
+    </div>
+
+    <button type="submit" class="button is-primary" [disabled]="!signupForm.valid">Submit</button>
+
+  </form>
+</user-form-container>

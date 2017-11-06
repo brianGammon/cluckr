@@ -1,0 +1,36 @@
+.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+  background-image: url('/assets/icons/android-chrome-512x512.png');
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+}
+
+.form-heading {
+  margin-bottom: 20px;
+}
+
+.form-background {
+  max-width: 350px;
+  margin: 25px auto;
+  border-radius: 5px;
+  background-color: rgba(255,255,255,0.85);
+}
+
+.form-container {
+  max-width: 310px;
+  margin: auto;
+  padding: 10px 0;
+}
+
+.version-tag {
+  margin-top: 10px;
+}

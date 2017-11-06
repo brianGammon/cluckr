@@ -79,7 +79,7 @@
     <div class="control wide">
       <input [(ngModel)]="joinFlockId" [ngModelOptions]="{standalone: true}" class="input" type="text" placeholder="Enter a Flock ID">
       <div *ngIf="flockNotFound && joinFlockId" class="help is-danger">
-        Error flock not found
+        No flock found with that key.
       </div>
     </div>
     <div class="control">

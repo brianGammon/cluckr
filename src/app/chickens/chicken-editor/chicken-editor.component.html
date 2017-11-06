@@ -11,20 +11,34 @@
     </div>
   </div>
 
-  <label for="name">Name</label>
-  <input #setFocus type="text" id="name" class="input" formControlName="name" maxlength="25" required>
-
-  <div *ngIf="formErrors.name" class="help is-danger">
-    {{ formErrors.name }}
+  <div class="field">
+    <label class="label">Name</label>
+    <div class="control has-icons-right">
+      <input #setFocus type="text" id="name" class="input" formControlName="name" maxlength="25" [ngClass]="{'is-danger': formErrors.name}">
+      <span *ngIf="formErrors.name" class="icon is-small is-right">
+        <i class="fa fa-warning"></i>
+      </span>
+    </div>
+    <p *ngIf="formErrors.name" class="help is-danger">
+      {{ formErrors.name }}
+    </p>
   </div>
 
-  <label for="breed">Breed</label>
-  <input type="text" id="breed" class="input" formControlName="breed" maxlength="25">
+  <div class="field">
+    <label class="label">Breed</label>
+    <div class="control">
+      <input type="text" id="breed" class="input" formControlName="breed" maxlength="25">
+    </div>
+  </div>
 
-  <label for="hatched">Hatched</label>
-  <input type="date" id="hatched" class="input" formControlName="hatched">
+  <div class="field">
+    <label class="label">Hatched</label>
+    <div class="control">
+      <input type="date" id="hatched" class="input" formControlName="hatched">
+    </div>
+  </div>
 
-  <label for="photo">Photo</label>
+  <label class="label">Photo</label>
   <loading-spinner *ngIf="loadingMessage" [message]="loadingMessage"></loading-spinner>
   <div *ngIf="!loadingMessage" class="level is-mobile">
     <div class="level-left photo-picker">

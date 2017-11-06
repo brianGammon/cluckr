@@ -1,0 +1,28 @@
+<div class="background">
+  <div class="form-background">
+    <div class="form-container">
+      <div class="form-heading">
+        <p class="title is-3">Cluckr</p>
+        <p class="subtitle is-5 ">Your backyard chicken egg tracker</p>
+      </div>
+      <div *ngIf="showTabs" class="tabs is-toggle is-small">
+        <ul>
+          <li routerLink="/login" routerLinkActive="is-active">
+            <a>Log In</a>
+          </li>
+          <li routerLink="/signup" routerLinkActive="is-active">
+            <a>Sign Up</a>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="errorMessage" class="notification is-danger">
+        {{ errorMessage }}
+      </div>
+
+      <ng-content></ng-content>
+
+      <p class="version-tag has-text-grey has-text-right is-size-7">{{ appVersion }}</p>
+
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 {
   "name": "cluckr",
-  "version": "0.8.1",
+  "version": "0.9.5",
   "license": "MIT",
   "scripts": {
     "ng": "ng",

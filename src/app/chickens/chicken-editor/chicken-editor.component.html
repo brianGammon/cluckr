@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="field">
+  <div class="field lg-field">
     <label class="label">Name</label>
     <div class="control has-icons-right">
       <input #setFocus type="text" id="name" class="input" formControlName="name" maxlength="25" [ngClass]="{'is-danger': formErrors.name}">
@@ -24,14 +24,14 @@
     </p>
   </div>
 
-  <div class="field">
+  <div class="field lg-field">
     <label class="label">Breed</label>
     <div class="control">
       <input type="text" id="breed" class="input" formControlName="breed" maxlength="25">
     </div>
   </div>
 
-  <div class="field">
+  <div class="field md-field">
     <label class="label">Hatched</label>
     <div class="control">
       <input type="date" id="hatched" class="input" formControlName="hatched">
@@ -52,10 +52,10 @@
               <input class="file-input" (change)="onImageSelected($event)" type="file" accept="image/*" name="photo">
               <span class="file-cta full-width">
                 <span class="file-icon">
-                  <i class="fa fa-upload"></i>
+                  <i class="fa fa-camera"></i>
                 </span>
                 <span class="file-label">
-                  Choose a photo...
+                  Photo
                 </span>
               </span>
             </label>
@@ -76,7 +76,7 @@
                 <i class="fa fa-ban"></i>
               </span>
               <span>
-                Delete Profile Photo
+                Delete Photo
               </span>
             </a>
           </div>

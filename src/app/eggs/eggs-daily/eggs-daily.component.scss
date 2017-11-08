@@ -1,9 +1,16 @@
-.egg-list {
-  margin-top: 10px;
+.egg-info {
+  margin-top: 8px;
 }
 
-.sticky-note {
-  padding-top: 0;
+.egg-info .columns:first-child .column {
+  padding-bottom: 5px;
+}
+.egg-info .columns:not(:first-child) .column {
+  padding-top: 5px;
+}
+
+.media-content .column {
+  padding-top: 7px;
 }
 
 .edit-icon {
@@ -12,4 +19,8 @@
 
 .weight {
   text-align: end;
+}
+
+.box:not(:last-child) {
+  margin-bottom: .5rem;
 }

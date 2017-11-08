@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="field">
+  <div class="field md-field">
     <label class="label">Date</label>
     <div class="control">
       <input type="date" id="dateLaid" class="input" formControlName="dateLaid" [ngClass]="{'is-danger': formErrors.dateLaid}">
@@ -22,7 +22,7 @@
     </p>
   </div>
 
-  <div class="field">
+  <div class="field md-field">
     <label class="label">Chicken</label>
     <div class="control">
       <div class="select">
@@ -38,31 +38,24 @@
     </p>
   </div>
 
-  <div class="level is-mobile">
-    <div class="level-left">
-      <div class="level-item">
-        <div class="field">
-          <label class="label">Weight (g)</label>
-          <div class="control has-icons-right">
-            <input type="text" id="weight" class="input" formControlName="weight" [ngClass]="{'is-danger': formErrors.weight}">
-            <span *ngIf="formErrors.weight" class="icon is-small is-right">
-              <i class="fa fa-warning"></i>
-            </span>
-          </div>
-          <p *ngIf="formErrors.weight" class="help is-danger">
-            {{ formErrors.weight }}
-          </p>
-        </div>
-      </div>
-      <div class="level-item damaged-checkbox">
-        <div class="field">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" id="damaged" formControlName="damaged"> Damaged
-            </label>
-          </div>
-        </div>
-      </div>
+  <div class="field md-field">
+    <label class="label">Weight (g)</label>
+    <div class="control has-icons-right">
+      <input type="text" id="weight" class="input" formControlName="weight" [ngClass]="{'is-danger': formErrors.weight}">
+      <span *ngIf="formErrors.weight" class="icon is-small is-right">
+        <i class="fa fa-warning"></i>
+      </span>
+    </div>
+    <p *ngIf="formErrors.weight" class="help is-danger">
+      {{ formErrors.weight }}
+    </p>
+  </div>
+
+  <div class="field">
+    <div class="control">
+      <label class="checkbox">
+        <input type="checkbox" id="damaged" formControlName="damaged"> This egg was found damaged
+      </label>
     </div>
   </div>
 

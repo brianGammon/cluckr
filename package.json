@@ -1,6 +1,6 @@
 {
   "name": "cluckr",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -26,12 +26,12 @@
     "angular-calendar": "^0.21.2",
     "angularfire2": "4.0.0-rc.2",
     "blueimp-canvas-to-blob": "^3.14.0",
-    "bulma": "^0.5.3",
+    "bulma": "^0.6.1",
     "core-js": "^2.4.1",
     "firebase": "4.3.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "ng2-img-max": "^2.1.5",
+    "ng2-img-max": "2.1.5",
     "rxjs": "^5.4.3",
     "zone.js": "^0.8.17"
   },

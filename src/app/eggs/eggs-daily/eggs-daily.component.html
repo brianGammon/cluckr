@@ -1,109 +1,119 @@
 <div *ngIf="eggs | async; let eggs">
-    <div class="level is-mobile">
-      <div class="level-left">
-        <div class="level-item">
-          <p class="title is-6">Eggs By Day</p>
-        </div>
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="title is-6">Eggs By Day</p>
       </div>
-      <div class="level-right">
-        <div class="level-item has-text-centered">
-          <a class="button is-small is-primary" routerLink="/egg/add" [queryParams]="{date: dateString}">
-            <span class="icon">
-              <i class="fa fa-plus" aria-hidden="true"></i>
-            </span>
-            <span>Egg</span>
+    </div>
+    <div class="level-right">
+      <div class="level-item has-text-centered">
+        <a class="button is-small is-primary" routerLink="/egg/add" [queryParams]="{date: dateString}">
+          <span class="icon">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </span>
+          <span>Egg</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="level is-mobile">
+    <div class="level-item has-text-centered">
+      <a class="button" [routerLink]="['/eggs/day', previousDate]">
+        <span class="icon is-small">
+          <i class="fa fa-chevron-left"></i>
+        </span>
+      </a>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Date</p>
+        <p class="title is-4">{{ dateString | date }}</p>
+      </div>
+    </div>
+
+    <div class="level-item has-text-centered">
+      <a class="button" [routerLink]="['/eggs/day', nextDate]">
+        <span class="icon is-small">
+          <i class="fa fa-chevron-right"></i>
+        </span>
+      </a>
+    </div>
+
+    <div class="level-item has-text-centered">
+      <a class="button" [routerLink]="['/eggs/month', dateString.substring(0,7)]">
+        <span class="icon is-small">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </a>
+    </div>
+
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Eggs</p>
+        <p class="title is-4">{{ eggs.length }}</p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="egg-list">
+    <div *ngFor="let egg of eggs" class="box is-radiusless">
+      <div class="media">
+        <div class="media-left">
+          <a class="image is-32x32" [routerLink]="['/egg/edit', egg['$key']]">
+            <img src="/assets/images/egg-icon.png">
           </a>
         </div>
-
-      </div>
-
-    </div>
-
-    <div class="level is-mobile">
-      <div class="level-item has-text-centered">
-        <a class="button" [routerLink]="['/eggs/day', previousDate]">
-          <span class="icon is-small">
-            <i class="fa fa-chevron-left"></i>
-          </span>
-        </a>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Date</p>
-          <p class="title is-4">{{ dateString | date }}</p>
-        </div>
-      </div>
-
-      <div class="level-item has-text-centered">
-        <a class="button" [routerLink]="['/eggs/day', nextDate]">
-          <span class="icon is-small">
-            <i class="fa fa-chevron-right"></i>
-          </span>
-        </a>
-      </div>
-
-      <div class="level-item has-text-centered">
-        <a class="button" [routerLink]="['/eggs/month', dateString.substring(0,7)]">
-          <span class="icon is-small">
-            <i class="fa fa-calendar"></i>
-          </span>
-        </a>
-      </div>
-
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Eggs</p>
-          <p class="title is-4">{{ eggs.length }}</p>
-        </div>
-      </div>
-
-    </div>
-
-    <hr>
-
-    <div class="egg-list">
-      <div *ngFor="let egg of eggs" class="media">
         <div class="media-content">
-          <div class="content">
-            <div class="columns is-mobile">
-              <div class="column is-half-mobile is-two-thirds-tablet is-clipped">
-                <a *ngIf="egg.chickenId !== 'unknown'" [routerLink]="['/chicken', egg.chickenId]">{{ egg.chickenName }}</a>
-                <p *ngIf="egg.chickenId === 'unknown'">{{ egg.chickenName }}</p>
-              </div>
-              <div class="column is-one-quarter weight">
-                <span *ngIf="egg.weight">
-                  {{ egg.weight }}g
-                </span>
-              </div>
-              <div class="column edit-icon">
-                  <a class="button is-white" [routerLink]="['/egg/edit', egg['$key']]">
-                    <span class="icon">
-                      <i class="fa fa-pencil"></i>
-                    </span>
-                  </a>
-              </div>
+          <div class="columns is-mobile">
+            <div class="column is-four-fifths is-clipped">
+              <a class="is-size-6" *ngIf="egg.chickenId !== 'unknown'" [routerLink]="['/chicken', egg.chickenId]">{{ egg.chickenName }}</a>
+              <p class="is-size-6" *ngIf="egg.chickenId === 'unknown'">{{ egg.chickenName }}</p>
+              <p class="is-size-6" [ngClass]="{'has-text-grey-light': !egg.weight}">
+                {{ egg.weight ? egg.weight : '-- ' }}g
+              </p>
             </div>
-            <div *ngIf="egg.damaged" class="columns is-mobile">
-              <div class="column is-offset-1 is-2 sticky-note">
-                <span class="icon has-text-danger">
-                  <i class="fa fa-warning"></i>
-                </span>
-              </div>
-              <div class="content">This egg was damaged</div>
-            </div>
-            <div *ngIf="egg.notes" class="columns is-mobile">
-              <div class="column is-offset-1 is-2 sticky-note">
+
+            <div class="column edit-icon">
+              <a class="button is-white is-pulled-right" [routerLink]="['/egg/edit', egg['$key']]">
                 <span class="icon">
-                  <i class="fa fa-sticky-note-o"></i>
+                  <i class="fa fa-pencil"></i>
                 </span>
-              </div>
-              <div class="content"><em>"{{ egg.notes }}"</em></div>
+              </a>
             </div>
           </div>
+
         </div>
         <div class="media-right">
           <button class="delete is-medium" (click)="deleteEgg(egg.$key)"></button>
         </div>
       </div>
+      <div class="egg-info">
+        <div *ngIf="egg.damaged" class="columns is-variable is-1 is-mobile">
+          <div class="column is-1 is-offset-1">
+            <span class="icon has-text-danger is-pulled-right">
+              <i class="fa fa-warning"></i>
+            </span>
+          </div>
+          <div class="column">This egg was damaged</div>
+        </div>
+
+        <div *ngIf="egg.notes" class="columns is-variable is-1 is-mobile">
+          <div class="column is-1 is-offset-1">
+            <span class="icon is-pulled-right">
+              <i class="fa fa-sticky-note-o"></i>
+            </span>
+          </div>
+          <div class="column">
+            <em>"{{ egg.notes }}"</em>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
+  </div>
 </div>

@@ -68,3 +68,21 @@ body {
 .is-clipped {
   text-overflow: ellipsis;
 }
+
+// Bulma override for v.0.6.1
+.level-right .level-item:last-child {
+  margin-right: 0;
+}
+
+// Input field widths for forms
+.sm-field {
+  max-width: 110px;
+}
+
+.md-field {
+  max-width: 220px;
+}
+
+.lg-field {
+  max-width: 330px;
+}

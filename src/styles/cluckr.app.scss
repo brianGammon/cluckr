@@ -69,9 +69,17 @@ body {
   text-overflow: ellipsis;
 }
 
-// Bulma override for v.0.6.1
+// Bulma overrides for v.0.6.1
 .level-right .level-item:last-child {
   margin-right: 0;
+}
+
+.level:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+hr {
+  margin: 1rem 0;
 }
 
 // Input field widths for forms

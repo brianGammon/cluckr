@@ -121,9 +121,9 @@
           <p class="heading">Last 7 Days</p>
         </div>
       </div>
-      <div class="columns is-mobile is-variable is-1">
+      <div class="columns is-mobile is-gapless">
         <a *ngFor="let key of objectKeys(stats.lastSevenDays)" class="column" [routerLink]="['/eggs/day', key]">
-          <div class="has-text-centered box">
+          <div class="has-text-centered box is-radiusless" [ngClass]="{'is-success': stats.lastSevenDays[key] > 0}">
             <p class="is-size-7">{{ key | date:'MMM' }}</p>
             <p>{{ key | date:'d' }}</p>
             <p>

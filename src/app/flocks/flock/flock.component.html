@@ -116,7 +116,11 @@
                 </div>
               </div>
               <div class="media-right">
-                <button *ngIf="flock.ownedBy === user['$key']" class="delete is-medium" (click)="deleteChicken(chicken)"></button>
+                <a *ngIf="flock.ownedBy === user['$key']" class="button is-white" (click)="deleteChicken(chicken)">
+                  <span class="icon trash">
+                    <i class="fa fa-trash-o"></i>
+                  </span>
+                </a>
               </div>
             </div>
           </div>

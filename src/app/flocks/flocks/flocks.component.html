@@ -30,7 +30,11 @@
         </div>
         <div class="level-right">
           <div class="level-item">
-            <button *ngIf="flock.ownedBy === user['$key']" class="delete" (click)="deleteFlock(flock.$key)"></button>
+            <a *ngIf="flock.ownedBy === user['$key']" class="button is-white" (click)="deleteFlock(flock.$key)">
+              <span class="icon trash">
+                <i class="fa fa-trash-o"></i>
+              </span>
+            </a>
           </div>
         </div>
       </div>

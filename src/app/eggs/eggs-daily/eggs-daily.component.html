@@ -87,7 +87,11 @@
 
         </div>
         <div class="media-right">
-          <button class="delete is-medium" (click)="deleteEgg(egg.$key)"></button>
+          <a class="button is-white" (click)="deleteEgg(egg.$key)">
+            <span class="icon trash">
+              <i class="fa fa-trash-o"></i>
+            </span>
+          </a>
         </div>
       </div>
       <div class="egg-info">

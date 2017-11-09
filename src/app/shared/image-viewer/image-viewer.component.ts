@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Component({
   selector: 'image-viewer',
@@ -16,6 +16,19 @@ export class ImageViewerComponent {
   imageUrl: string;
 
   constructor() {
+  }
+
+  @HostListener('click', ['$event.target']) onClick(element: Element) {
+    if (element.className.indexOf('modal-background') !== -1) {
+      this.toggleModal();
+    }
+  }
+
+  @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const escapeKey = 27;
+    if (event.keyCode === escapeKey) {
+      this.toggleModal();
+    }
   }
 
   toggleModal() {

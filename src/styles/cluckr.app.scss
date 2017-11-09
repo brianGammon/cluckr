@@ -29,6 +29,10 @@ body {
   margin-bottom: 5px;
 }
 
+.modal {
+  z-index: 999;
+}
+
 @media screen and (max-width: 768px) {
   .cal-header {
     font-size: xx-small;

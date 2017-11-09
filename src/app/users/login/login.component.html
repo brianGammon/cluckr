@@ -4,7 +4,7 @@
     <div class="field">
       <label class="label">Email</label>
       <div class="control has-icons-right">
-        <input #setFocus type="email" id="email" class="input" [ngClass]="{'is-danger': formErrors.email, 'is-success': !formErrors.email && loginForm.get('email').dirty}"
+        <input type="email" id="email" class="input" [ngClass]="{'is-danger': formErrors.email, 'is-success': !formErrors.email && loginForm.get('email').dirty}"
           formControlName="email" autocomplete="username">
         <span *ngIf="!formErrors.email && loginForm.get('email').dirty" class="icon is-small is-right">
           <i class="fa fa-check"></i>
@@ -19,7 +19,7 @@
     <div class="field">
       <label class="label">Password</label>
       <div class="control has-icons-right">
-        <input #setFocus type="password" id="password" class="input" [ngClass]="{'is-danger': formErrors.password, 'is-success': !formErrors.password && loginForm.get('password').dirty}"
+        <input type="password" id="password" class="input" [ngClass]="{'is-danger': formErrors.password, 'is-success': !formErrors.password && loginForm.get('password').dirty}"
           formControlName="password" autocomplete="current-password">
         <span *ngIf="!formErrors.password && loginForm.get('password').dirty" class="icon is-small is-right">
           <i class="fa fa-check"></i>

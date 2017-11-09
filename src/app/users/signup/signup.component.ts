@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
@@ -20,7 +20,7 @@ export class PasswordValidation {
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit, AfterViewInit {
+export class SignupComponent implements OnInit {
   errorMessage: string;
   signupForm: FormGroup;
   passReset = false; // set to true when password reset is triggered
@@ -46,8 +46,6 @@ export class SignupComponent implements OnInit, AfterViewInit {
     }
   };
 
-  @ViewChildren('setFocus') vc;
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -56,10 +54,6 @@ export class SignupComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.buildForm();
-  }
-
-  ngAfterViewInit() {
-    this.vc.first.nativeElement.focus();
   }
 
   signup(): void {

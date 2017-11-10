@@ -11,6 +11,7 @@ import { TopNavComponent } from './top-nav/top-nav.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   providers: [
@@ -32,13 +33,15 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
     LoadingSpinnerComponent,
     TopNavComponent,
     PageNotFoundComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    ConfirmDialogComponent
   ],
   exports: [
     LoadingSpinnerComponent,
     TopNavComponent,
     PageNotFoundComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }

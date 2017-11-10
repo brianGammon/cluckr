@@ -1,38 +1,19 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+// tslint:disable:no-access-missing-member
+import { Component, Inject, Input, Output, EventEmitter, HostListener, Renderer2 } from '@angular/core';
+import { ModalBaseComponent } from '../modal-base/modal-base.component';
 
 @Component({
   selector: 'image-viewer',
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.scss']
 })
-export class ImageViewerComponent {
-  @Output()
-  showModalChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  @Input()
-  showModal = true;
-
+export class ImageViewerComponent extends ModalBaseComponent {
   @Input()
   imageUrl: string;
 
-  constructor() {
-  }
-
-  @HostListener('click', ['$event.target']) onClick(element: Element) {
-    if (element.className.indexOf('modal-background') !== -1) {
-      this.toggleModal();
-    }
-  }
-
-  @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
-    const escapeKey = 27;
-    if (event.keyCode === escapeKey) {
-      this.toggleModal();
-    }
-  }
-
-  toggleModal() {
-    this.showModal = !this.showModal;
-    this.showModalChange.emit(this.showModal);
+  constructor(
+    @Inject(Renderer2) renderer: Renderer2
+  ) {
+    super(renderer);
   }
 }

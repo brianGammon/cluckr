@@ -1,0 +1,12 @@
+<div class="modal" [ngClass]="{'is-active': showModal}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="notification is-clearfix">
+      <ng-content></ng-content>
+      <div class="controls is-pulled-right">
+        <a class="button" (click)="close(true)">Yes</a>
+        <a class="button is-primary" (click)="close()">No</a>
+      </div>
+    </div>
+  </div>
+</div>

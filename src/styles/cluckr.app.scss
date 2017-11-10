@@ -25,6 +25,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+html.modal-open {
+  overflow: hidden;
+}
+
 .input {
   margin-bottom: 5px;
 }

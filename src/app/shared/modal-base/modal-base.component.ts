@@ -23,10 +23,25 @@ export abstract class ModalBaseComponent {
   open() {
     this.showModal = true;
     this.renderer.addClass(document.documentElement, 'modal-open');
+    this.stopBodyScrolling(true);
   }
 
   close() {
     this.showModal = false;
     this.renderer.removeClass(document.documentElement, 'modal-open');
+    this.stopBodyScrolling(false);
+  }
+
+  // https://benfrain.com/preventing-body-scroll-for-modals-in-ios/
+  private stopBodyScrolling(bool) {
+    if (bool === true) {
+        document.body.addEventListener('touchmove', this.freezeVp, false);
+    } else {
+        document.body.removeEventListener('touchmove', this.freezeVp, false);
+    }
+  }
+
+  private freezeVp(e) {
+    e.preventDefault();
   }
 }

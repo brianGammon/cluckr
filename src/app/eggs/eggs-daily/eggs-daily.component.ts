@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { UserService, ChickenService, EggService } from '../../shared/services';
@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { Egg, Chicken } from '../../shared/models';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   templateUrl: './eggs-daily.component.html',
@@ -16,6 +17,10 @@ export class EggsDailyComponent implements OnInit, OnDestroy {
   dateString: string;
   previousDate: string;
   nextDate: string;
+
+  @ViewChild(ConfirmDialogComponent)
+  private confirmDialog: ConfirmDialogComponent;
+
   private flockId: string;
   private unsubscriber: Subject<void> = new Subject<void>();
 
@@ -46,11 +51,14 @@ export class EggsDailyComponent implements OnInit, OnDestroy {
     this.unsubscriber.complete();
   }
 
-  deleteEgg(key) {
-    if (window.confirm('Are you sure? Press OK to delete the egg.')) {
-      this.eggService.deleteEgg(this.flockId, key)
-        .catch(error => console.log(error));
-    }
+  deleteEgg(key: string) {
+    this.confirmDialog.open().result
+      .then(confirmed => {
+        if (confirmed) {
+          this.eggService.deleteEgg(this.flockId, key)
+          .catch(error => console.log(error));
+        }
+      });
   }
 
   private setNavDates(date: string) {

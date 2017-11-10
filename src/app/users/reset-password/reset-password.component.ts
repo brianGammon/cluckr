@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { forOwn } from 'lodash';
@@ -7,7 +7,7 @@ import { forOwn } from 'lodash';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
-export class ResetPasswordComponent implements OnInit, AfterViewInit {
+export class ResetPasswordComponent implements OnInit {
   errorMessage: string;
   success: boolean;
   form: FormGroup;
@@ -22,8 +22,6 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
     }
   };
 
-  @ViewChildren('setFocus') vc;
-
   constructor(
     private fb: FormBuilder,
     private userService: UserService
@@ -31,10 +29,6 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.buildForm();
-  }
-
-  ngAfterViewInit() {
-    this.vc.first.nativeElement.focus();
   }
 
   resetPassword() {

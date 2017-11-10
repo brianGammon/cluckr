@@ -31,7 +31,7 @@
   </div>
   <article class="media">
     <figure class="media-left">
-      <div class="profile-image" (click)="chickens[index].photoUrl ? showModal = !showModal : null" [ngStyle]="{ 'background-image': 'url(' + (chickens[index].thumbnailUrl ? chickens[index].thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
+      <div class="profile-image" (click)="chickens[index].photoUrl ? imageViewer.open() : null" [ngStyle]="{ 'background-image': 'url(' + (chickens[index].thumbnailUrl ? chickens[index].thumbnailUrl : '/assets/images/default-profile-photo.png') + ')'}">
 
       </div>
     </figure>
@@ -139,7 +139,7 @@
       </div>
     </div>
   </div>
-  <image-viewer [(showModal)]="showModal" [imageUrl]="chickens[index].photoUrl"></image-viewer>
+  <image-viewer #imageViewer [imageUrl]="chickens[index].photoUrl"></image-viewer>
 </div>
 
 <ng-template #loading>

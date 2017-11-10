@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { UserService, FlockService } from '../../shared/services';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { User, Flock } from '../../shared/models';
 
 @Component({
@@ -17,6 +18,11 @@ export class FlocksComponent implements OnInit, OnDestroy {
   newFlockName: string;
   joinFlockId: string;
   flockNotFound = false;
+  deleteCandidate: Flock;
+
+  @ViewChild(ConfirmDialogComponent)
+  private confirmDialog: ConfirmDialogComponent;
+
   private unsubscriber: Subject<void> = new Subject<void>();
 
   constructor(
@@ -63,10 +69,10 @@ export class FlocksComponent implements OnInit, OnDestroy {
       this.flockService.getFlock(this.joinFlockId).take(1).subscribe(flock => {
         if (flock.name) {
           this.userService.linkFlock(this.joinFlockId)
-          .then(() => {
-            this.router.navigateByUrl('/flock');
-          })
-          .catch(err => console.log(err));
+            .then(() => {
+              this.router.navigateByUrl('/flock');
+            })
+            .catch(err => console.log(err));
         } else {
           this.flockNotFound = true;
         }
@@ -79,22 +85,27 @@ export class FlocksComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/flock');
   }
 
-  deleteFlock(flockId: string) {
-    if (window.confirm('Are you sure? Click OK to delete the flock, along with chickens and eggs belonging to it.')) {
-      this.userService.getFlockMembers(flockId).take(1).subscribe(users => {
-        const unlinkUsers = [];
+  deleteFlock(flock: Flock) {
+    const flockId = flock['$key'];
+    this.deleteCandidate = flock;
+    this.confirmDialog.open().result
+      .then(confirmed => {
+        if (confirmed) {
+          this.userService.getFlockMembers(flockId).take(1).subscribe(users => {
+            const unlinkUsers = [];
 
-        users.forEach(user => {
-          unlinkUsers.push(this.userService.unlinkFlock(flockId, user['$key']));
-        });
+            users.forEach(user => {
+              unlinkUsers.push(this.userService.unlinkFlock(flockId, user['$key']));
+            });
 
-        Promise.all(unlinkUsers)
-          .then(() => this.flockService.deleteFlock(this.user['$key'], flockId))
-          .catch(err => {
-            console.log(err);
-            throw new Error(err);
+            Promise.all(unlinkUsers)
+              .then(() => this.flockService.deleteFlock(this.user['$key'], flockId))
+              .catch(err => {
+                console.log(err);
+                throw new Error(err);
+              });
           });
+        }
       });
-    }
   }
 }

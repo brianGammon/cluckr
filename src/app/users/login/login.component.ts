@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -8,7 +8,7 @@ import { forOwn } from 'lodash';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit {
   errorMessage: string;
   loginForm: FormGroup;
   formErrors = {
@@ -25,8 +25,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   };
 
-  @ViewChildren('setFocus') vc;
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -35,10 +33,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.buildForm();
-  }
-
-  ngAfterViewInit() {
-    this.vc.first.nativeElement.focus();
   }
 
   login(): void {

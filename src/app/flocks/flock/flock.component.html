@@ -139,3 +139,7 @@
 <ng-template #loading>
   <loading-spinner></loading-spinner>
 </ng-template>
+
+<confirm-dialog>
+  <p>Are you sure you want to delete <span class="has-text-weight-bold">{{ deleteCandidate?.name || 'this chicken' }}</span>?</p>
+</confirm-dialog>

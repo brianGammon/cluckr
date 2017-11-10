@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { UserService, FlockService, ChickenService, EggService } from '../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { sortBy} from 'lodash';
+import { sortBy } from 'lodash';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { Flock, Chicken, FlockStats, Egg, User } from '../../shared/models';
 
 @Component({
@@ -17,6 +18,10 @@ export class FlockComponent implements OnInit, OnDestroy {
   flock: Observable<Flock> = null;
   chickens: Observable<Chicken[]> = null;
   stats: FlockStats = null;
+  deleteCandidate: Chicken;
+
+  @ViewChild(ConfirmDialogComponent)
+  private confirmDialog: ConfirmDialogComponent;
 
   private unsubscriber: Subject<void> = new Subject<void>();
   private flockId: string;
@@ -28,7 +33,7 @@ export class FlockComponent implements OnInit, OnDestroy {
     private flockService: FlockService,
     private chickenService: ChickenService,
     private eggService: EggService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.userService.currentUser.takeUntil(this.unsubscriber).subscribe(user => {
@@ -58,10 +63,14 @@ export class FlockComponent implements OnInit, OnDestroy {
   }
 
   deleteChicken(chicken: Chicken) {
-    if (window.confirm('Are you sure? Press OK to delete the chicken.')) {
-      this.chickenService.deleteChicken(this.flockId, chicken)
-      .catch(err => console.log(err));
-    }
+    this.deleteCandidate = chicken;
+    this.confirmDialog.open().result
+      .then((confirmed) => {
+        if (confirmed) {
+          this.chickenService.deleteChicken(this.flockId, chicken)
+            .catch(err => console.log(err));
+        }
+      });
   }
 
   buildStats(eggs: Egg[]): FlockStats {

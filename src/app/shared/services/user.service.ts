@@ -25,16 +25,16 @@ export class UserService {
         return Observable.of(null);
       }
       this.uid = fbUser.uid;
-      return this.db.object(`users/${fbUser.uid}`);
+      return this.db.object(`userSettings/${fbUser.uid}`);
     });
   }
 
   setCurrentFlockId(flockId: string) {
-    return this.db.object(`users/${this.uid}/currentFlockId`).set(flockId);
+    return this.db.object(`userSettings/${this.uid}/currentFlockId`).set(flockId);
   }
 
   linkFlock(flockId: string) {
-    return this.db.object(`users/${this.uid}/flocks/${flockId}`).set(true)
+    return this.db.object(`userSettings/${this.uid}/flocks/${flockId}`).set(true)
       .then(() => this.setCurrentFlockId(flockId));
   }
 
@@ -48,8 +48,8 @@ export class UserService {
   }
 
   unlinkFlock(flockId: string, userId: string) {
-    return this.db.object(`users/${userId}/flocks/${flockId}`).remove()
-      .then(() => this.db.object(`users/${userId}/currentFlockId`).remove());
+    return this.db.object(`userSettings/${userId}/flocks/${flockId}`).remove()
+      .then(() => this.db.object(`userSettings/${userId}/currentFlockId`).remove());
   }
 
   signUp(email: string, password: string) {
@@ -73,10 +73,9 @@ export class UserService {
   }
 
   private updateUserData(user: firebase.User): void {
-    const path = `users/${user.uid}`;
+    const path = `userSettings/${user.uid}`;
     const data = {
-      email: user.email,
-      name: user.displayName
+      displayName: user.displayName || user.email
     };
 
     this.db.object(path).update(data)

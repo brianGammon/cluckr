@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="flock.name">
-    <div *ngIf="chickens | async; let chickens; else loading" class="content chicken-list">
+    <div *ngIf="chickens | async; let chickens; else loading" class="content">
       <div class="level is-mobile">
         <div class="level-left">
           <div class="level-item">
@@ -51,7 +51,7 @@
             <p class="subtitle is-6">{{ stats?.heaviest.chickenName }}</p>
           </div>
         </div>
-        <div *ngIf="stats?.heaviest" class="level-item has-text-centered">
+        <div *ngIf="stats?.averageWeight" class="level-item has-text-centered">
           <div>
             <p class="heading">Avg Weight</p>
             <p class="title is-4">{{ stats?.averageWeight | number:'1.1-1' }}</p>

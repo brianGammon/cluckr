@@ -1,12 +1,12 @@
-<div class="level is-mobile">
-  <div class="level-left">
-    <div class="level-item">
-      <p class="title is-6">My Flocks</p>
+<div *ngIf="flocks | async; let flocks; else loading">
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="title is-6">My Flocks</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div *ngIf="flocks | async; let flocks; else loading">
   <div class="level is-mobile">
     <div class="level-left">
       <div class="level-item">
@@ -41,71 +41,73 @@
 
     </div>
     <div *ngIf="flocks.length === 0" class="panel-block">
-      <p class="has-text-grey"><em>No flocks to manage, create or join one below...</em></p>
+      <p class="has-text-grey">
+        <em>No flocks to manage, create or join one below...</em>
+      </p>
     </div>
 
   </div>
 
   <hr>
-</div>
 
-<div class="level is-mobile">
-  <div class="level-left">
-    <div class="level-item">
-      <p class="heading">Create a new flock</p>
-    </div>
-  </div>
-</div>
-<form (submit)="addFlock()">
-  <div class="field has-addons">
-    <div class="control wide">
-      <input [(ngModel)]="newFlockName" [ngModelOptions]="{standalone: true}" maxlength="25" class="input" type="text" placeholder="Enter a name for your flock">
-    </div>
-    <div class="control">
-      <a class="button is-light">
-        <span class="icon">
-          <i class="fa fa-plus"></i>
-        </span>
-        <span>New</span>
-      </a>
-    </div>
-  </div>
-</form>
-
-<hr>
-<div class="level is-mobile">
-  <div class="level-left">
-    <div class="level-item">
-      <p class="heading">Join someone else's flock</p>
-    </div>
-  </div>
-</div>
-
-<form (submit)="joinFlock()">
-  <div class="field has-addons">
-    <div class="control wide">
-      <input [(ngModel)]="joinFlockId" [ngModelOptions]="{standalone: true}" class="input" type="text" placeholder="Enter a Flock ID">
-      <div *ngIf="flockNotFound && joinFlockId" class="help is-danger">
-        No flock found with that key.
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="heading">Create a new flock</p>
       </div>
     </div>
-    <div class="control">
-      <a class="button is-light">
-        <span class="icon">
-          <i class="fa fa-link"></i>
-        </span>
-        <span>Join</span>
-      </a>
+  </div>
+  <form (submit)="addFlock()">
+    <div class="field has-addons">
+      <div class="control wide">
+        <input [(ngModel)]="newFlockName" [ngModelOptions]="{standalone: true}" maxlength="25" class="input" type="text" placeholder="Enter a name for your flock">
+      </div>
+      <div class="control">
+        <a class="button is-light">
+          <span class="icon">
+            <i class="fa fa-plus"></i>
+          </span>
+          <span>New</span>
+        </a>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="heading">Join someone else's flock</p>
+      </div>
     </div>
   </div>
-</form>
 
-<div *ngIf="user?.currentFlockId" class="level">
-  <div class="level-item">
-    Invite someone to join your flock with this ID:
-  </div>
-  <div class="level-item">
-    {{ user.currentFlockId }}
+  <form (submit)="joinFlock()">
+    <div class="field has-addons">
+      <div class="control wide">
+        <input [(ngModel)]="joinFlockId" [ngModelOptions]="{standalone: true}" class="input" type="text" placeholder="Enter a Flock ID">
+        <div *ngIf="flockNotFound && joinFlockId" class="help is-danger">
+          No flock found with that key.
+        </div>
+      </div>
+      <div class="control">
+        <a class="button is-light">
+          <span class="icon">
+            <i class="fa fa-link"></i>
+          </span>
+          <span>Join</span>
+        </a>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="user?.currentFlockId" class="level">
+    <div class="level-item">
+      Invite someone to join your flock with this ID:
+    </div>
+    <div class="level-item">
+      {{ user.currentFlockId }}
+    </div>
   </div>
 </div>
 
@@ -114,5 +116,6 @@
 </ng-template>
 
 <confirm-dialog>
-  <p>Delete the flock <span class="has-text-weight-bold">{{ deleteCandidate?.name }}</span>, along with any chickens and eggs belonging to it?</p>
+  <p>Delete the flock
+    <span class="has-text-weight-bold">{{ deleteCandidate?.name }}</span>, along with any chickens and eggs belonging to it?</p>
 </confirm-dialog>

@@ -1,6 +1,6 @@
 export class User {
   $key: string;
-  email: string;
+  displayName: string;
   currentFlockId: string;
   flocks: any;
 }
